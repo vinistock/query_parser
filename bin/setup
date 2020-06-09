@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+if `which ragel`.empty?
+  puts <<~MESSAGE
+    Ragel is not installed in the system.
+
+    You can install it using Homebrew (check the Brewfile).
+  MESSAGE
+
+  exit 1
+end
+
+system "bundle install"
+system "bundle exec rake build"

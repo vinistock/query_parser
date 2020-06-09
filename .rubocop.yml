@@ -1,0 +1,36 @@
+require:
+  - rubocop-performance
+  - rubocop-minitest
+
+AllCops:
+  Exclude:
+    - ext/**/*
+    - vendor/bundle/**/*
+Layout/LineLength:
+  Max: 140
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
+Lint/RaiseException:
+  Enabled: true
+Lint/StructNewOverride:
+  Enabled: true
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+Style/ExponentialNotation:
+  Enabled: true
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+Style/RedundantRegexpCharacterClass:
+  Enabled: true
+Style/RedundantRegexpEscape:
+  Enabled: true
+Style/SlicingWithRange:
+  Enabled: true
