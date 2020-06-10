@@ -13,10 +13,11 @@ require "rake/extensiontask"
 
 task :ragel do
   ext_path = "ext/ragel_query_parser"
+  puts "Compiling Ragel..."
   system("ragel #{ext_path}/parser.rl -C -G2 -I ext/ragel_query_parser -o #{ext_path}/parser.c")
 end
 
-task build: %i[ragel compile]
+task build: %i[compile]
 
 Rake::ExtensionTask.new("ragel_query_parser") do |ext|
   ext.lib_dir = "lib/ragel_query_parser"
