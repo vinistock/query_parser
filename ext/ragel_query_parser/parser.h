@@ -2,6 +2,8 @@
 #define RQP_PARSER_H 1
 
 #include <ruby.h>
+#include <string.h>
+#include <ruby/encoding.h>
 
 void Init_parser(VALUE rb_mRagelQueryParser);
 

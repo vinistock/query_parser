@@ -17,6 +17,7 @@ task :ragel do
   system("ragel #{ext_path}/parser.rl -C -G2 -I ext/ragel_query_parser -o #{ext_path}/parser.c")
 end
 
+task make: %i[clobber ragel compile]
 task build: %i[compile]
 
 Rake::ExtensionTask.new("ragel_query_parser") do |ext|
