@@ -19,10 +19,10 @@
 
     action end_word {
         if (reading_value) {
-            VALUE string = rb_enc_str_new(buffer, p - buffer, encoding);
+            VALUE string = rb_obj_freeze(rb_enc_str_new(buffer, p - buffer, encoding));
             rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, string);
         } else {
-            current_key = rb_str_intern(rb_enc_str_new(buffer, p - buffer, encoding));
+            current_key = rb_str_intern(rb_obj_freeze(rb_enc_str_new(buffer, p - buffer, encoding)));
         }
     }
 
@@ -83,7 +83,7 @@ void Init_parser(VALUE rb_mRagelQueryParser) {
     VALUE rb_cParser = rb_define_class_under(rb_mRagelQueryParser, "Parser", rb_cObject);
 
     // TODO: better way of defining attr_reader from C?
-    rb_funcall(rb_cParser, rb_intern("attr_reader"), 1, rb_str_new_cstr("parameters"));
+    rb_funcall(rb_cParser, rb_intern("attr_reader"), 1, rb_obj_freeze(rb_str_new_cstr("parameters")));
 
     rb_define_method(rb_cParser, "initialize", parser_initialize, 0);
     rb_define_method(rb_cParser, "parse", parse, -1);
