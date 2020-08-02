@@ -23,3 +23,9 @@ Benchmark.ips do |x|
   x.report("rack") { rack_parser.parse_query(query_string) }
   x.compare!
 end
+
+Benchmark.memory do |x|
+  x.report("ragel") { ragel_parser.parse(query_string) }
+  x.report("rack") { rack_parser.parse_query(query_string) }
+  x.compare!
+end

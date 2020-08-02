@@ -245,9 +245,7 @@ void Init_parser(VALUE rb_mRagelQueryParser) {
     VALUE rb_cParser = rb_define_class_under(rb_mRagelQueryParser, "Parser", rb_cObject);
 
     // TODO: better way of defining attr_reader from C?
-    VALUE attr_reader_name = rb_str_new_cstr("parameters");
-    rb_mod_attr(1, &attr_reader_name, rb_cParser);
-//    rb_funcall(rb_cParser, rb_intern("attr_reader"), 1, );
+    rb_funcall(rb_cParser, rb_intern("attr_reader"), 1, rb_str_new_cstr("parameters"));
 
     rb_define_method(rb_cParser, "initialize", parser_initialize, 0);
     rb_define_method(rb_cParser, "parse", parse, -1);
