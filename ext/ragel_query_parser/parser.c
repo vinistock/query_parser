@@ -31,6 +31,7 @@ static const int parser_en_main = 1;
 static VALUE parse(int argc, VALUE* argv, VALUE self) {
     VALUE query_string, separator, unescaper;
     rb_scan_args(argc, argv, "11&", &query_string, &separator, &unescaper);
+    // TODO: use separator and unescaper
 
     rb_encoding *encoding = rb_enc_get(query_string);
     const char *p = RSTRING_PTR(query_string);
@@ -41,12 +42,12 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
     VALUE current_key = Qnil;
 
     
-#line 45 "ext/ragel_query_parser/parser.c"
+#line 46 "ext/ragel_query_parser/parser.c"
 	{
 	cs = parser_start;
 	}
 
-#line 50 "ext/ragel_query_parser/parser.c"
+#line 51 "ext/ragel_query_parser/parser.c"
 	{
 	if ( p == pe )
 		goto _test_eof;
@@ -67,16 +68,40 @@ tr0:
         reading_value = 0;
     }
 	goto st2;
+tr7:
+#line 20 "ext/ragel_query_parser/parser.rl"
+	{
+        if (reading_value) {
+            VALUE string = rb_enc_str_new(buffer, p - buffer, encoding);
+            rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, string);
+        } else {
+            current_key = rb_str_intern(rb_enc_str_new(buffer, p - buffer, encoding));
+        }
+    }
+#line 29 "ext/ragel_query_parser/parser.rl"
+	{
+        reading_value = 0;
+    }
+	goto st2;
 st2:
 	if ( ++p == pe )
 		goto _test_eof2;
 case 2:
-#line 75 "ext/ragel_query_parser/parser.c"
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
+#line 91 "ext/ragel_query_parser/parser.c"
+	switch( (*p) ) {
+		case 33: goto tr2;
+		case 93: goto tr2;
+		case 95: goto tr2;
+		case 126: goto tr2;
+	}
+	if ( (*p) < 39 ) {
+		if ( 35 <= (*p) && (*p) <= 37 )
 			goto tr2;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
+	} else if ( (*p) > 59 ) {
+		if ( (*p) > 91 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto tr2;
+		} else if ( (*p) >= 64 )
 			goto tr2;
 	} else
 		goto tr2;
@@ -91,14 +116,22 @@ st3:
 	if ( ++p == pe )
 		goto _test_eof3;
 case 3:
-#line 95 "ext/ragel_query_parser/parser.c"
-	if ( (*p) == 61 )
-		goto tr4;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
+#line 120 "ext/ragel_query_parser/parser.c"
+	switch( (*p) ) {
+		case 33: goto st3;
+		case 61: goto tr4;
+		case 93: goto st3;
+		case 95: goto st3;
+		case 126: goto st3;
+	}
+	if ( (*p) < 39 ) {
+		if ( 35 <= (*p) && (*p) <= 37 )
 			goto st3;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
+	} else if ( (*p) > 59 ) {
+		if ( (*p) > 91 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto st3;
+		} else if ( (*p) >= 64 )
 			goto st3;
 	} else
 		goto st3;
@@ -118,12 +151,21 @@ st4:
 	if ( ++p == pe )
 		goto _test_eof4;
 case 4:
-#line 122 "ext/ragel_query_parser/parser.c"
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
+#line 155 "ext/ragel_query_parser/parser.c"
+	switch( (*p) ) {
+		case 33: goto tr5;
+		case 93: goto tr5;
+		case 95: goto tr5;
+		case 126: goto tr5;
+	}
+	if ( (*p) < 39 ) {
+		if ( 35 <= (*p) && (*p) <= 37 )
 			goto tr5;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
+	} else if ( (*p) > 59 ) {
+		if ( (*p) > 91 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto tr5;
+		} else if ( (*p) >= 64 )
 			goto tr5;
 	} else
 		goto tr5;
@@ -142,11 +184,19 @@ st5:
 	if ( ++p == pe )
 		goto _test_eof5;
 case 5:
-#line 146 "ext/ragel_query_parser/parser.c"
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
+#line 188 "ext/ragel_query_parser/parser.c"
+	switch( (*p) ) {
+		case 33: goto st5;
+		case 38: goto tr7;
+		case 63: goto tr7;
+		case 93: goto st5;
+		case 95: goto st5;
+		case 126: goto st5;
+	}
+	if ( (*p) < 64 ) {
+		if ( 35 <= (*p) && (*p) <= 59 )
 			goto st5;
-	} else if ( (*p) > 90 ) {
+	} else if ( (*p) > 91 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
 			goto st5;
 	} else
@@ -173,14 +223,14 @@ case 5:
         }
     }
 	break;
-#line 177 "ext/ragel_query_parser/parser.c"
+#line 227 "ext/ragel_query_parser/parser.c"
 	}
 	}
 
 	_out: {}
 	}
 
-#line 71 "ext/ragel_query_parser/parser.rl"
+#line 72 "ext/ragel_query_parser/parser.rl"
 
 
     return Qnil;
@@ -194,7 +244,10 @@ static VALUE parser_initialize(VALUE self) {
 void Init_parser(VALUE rb_mRagelQueryParser) {
     VALUE rb_cParser = rb_define_class_under(rb_mRagelQueryParser, "Parser", rb_cObject);
 
-    rb_funcall(rb_cParser, rb_intern("attr_reader"), 1, rb_str_new_cstr("parameters"));
+    // TODO: better way of defining attr_reader from C?
+    VALUE attr_reader_name = rb_str_new_cstr("parameters");
+    rb_mod_attr(1, &attr_reader_name, rb_cParser);
+//    rb_funcall(rb_cParser, rb_intern("attr_reader"), 1, );
 
     rb_define_method(rb_cParser, "initialize", parser_initialize, 0);
     rb_define_method(rb_cParser, "parse", parse, -1);

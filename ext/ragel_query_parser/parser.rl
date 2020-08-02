@@ -39,12 +39,12 @@
     ##
     parameter_separator = ("?" | "&") >start_separator;
     key_value_separator = "=" %end_key_value_separator;
-    parameter_content = (alnum)+ >start_word %end_word;
+    parameter_content = (alnum | "-" | "." | "_" | "~" | ":" | "/" | "#" | "[" | "]" | "@" | "!" | "$" | "'" | "(" | ")" | "*" | "+" | "," | ";" | "%")+ >start_word %end_word;
 
     ##
     # Main machine definition
     ##
-    main := (parameter_separator parameter_content key_value_separator parameter_content);
+    main := (parameter_separator parameter_content key_value_separator parameter_content)+;
 }%%
 
 %% write data;
