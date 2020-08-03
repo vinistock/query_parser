@@ -18,11 +18,14 @@
     }
 
     action end_word {
+        VALUE string = rb_obj_freeze(
+            rb_funcall(unescaper, rb_intern("call"), 1, rb_enc_str_new(buffer, p - buffer, encoding))
+        );
+
         if (reading_value) {
-            VALUE string = rb_obj_freeze(rb_enc_str_new(buffer, p - buffer, encoding));
             rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, string);
         } else {
-            current_key = rb_str_intern(rb_obj_freeze(rb_enc_str_new(buffer, p - buffer, encoding)));
+            current_key = rb_str_intern(string);
         }
     }
 
@@ -56,7 +59,7 @@
 static VALUE parse(int argc, VALUE* argv, VALUE self) {
     VALUE query_string, separator, unescaper;
     rb_scan_args(argc, argv, "11&", &query_string, &separator, &unescaper);
-    // TODO: use separator and unescaper
+    // TODO: use separator
 
     rb_encoding *encoding = rb_enc_get(query_string);
     const char *p = RSTRING_PTR(query_string);
@@ -65,6 +68,10 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
     const char *buffer;
     int cs = 0, reading_value = 0;
     VALUE current_key = Qnil;
+
+    if (NIL_P(unescaper)) {
+        unescaper = rb_funcall(rb_obj_class(self), rb_intern("method"), 1, rb_obj_freeze(rb_str_new_cstr("unescape")));
+    }
 
     %%{
         write init;
@@ -79,6 +86,13 @@ static VALUE parser_initialize(VALUE self) {
     return self;
 }
 
+static VALUE unescape(VALUE self, VALUE string) {
+    VALUE rb_mEncoding = rb_const_get(rb_cObject, rb_intern("Encoding"));
+    VALUE utf_8 = rb_const_get(rb_mEncoding, rb_intern("UTF_8"));
+    VALUE rb_mUri = rb_const_get(rb_cObject, rb_intern("URI"));
+    return rb_funcall(rb_mUri, rb_intern("decode_www_form_component"), 2, string, utf_8);
+}
+
 void Init_parser(VALUE rb_mRagelQueryParser) {
     VALUE rb_cParser = rb_define_class_under(rb_mRagelQueryParser, "Parser", rb_cObject);
 
@@ -87,4 +101,6 @@ void Init_parser(VALUE rb_mRagelQueryParser) {
 
     rb_define_method(rb_cParser, "initialize", parser_initialize, 0);
     rb_define_method(rb_cParser, "parse", parse, -1);
+
+    rb_define_singleton_method(rb_cParser, "unescape", unescape, 1);
 }
