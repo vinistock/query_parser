@@ -9,12 +9,16 @@
 
 #include "parser.h"
 
+static VALUE rb_mEncoding;
+static VALUE utf_8;
+static VALUE rb_mUri;
 
-#line 51 "ext/ragel_query_parser/parser.rl"
+
+#line 55 "ext/ragel_query_parser/parser.rl"
 
 
 
-#line 18 "ext/ragel_query_parser/parser.c"
+#line 22 "ext/ragel_query_parser/parser.c"
 static const int parser_start = 1;
 static const int parser_first_final = 5;
 static const int parser_error = 0;
@@ -22,7 +26,7 @@ static const int parser_error = 0;
 static const int parser_en_main = 1;
 
 
-#line 54 "ext/ragel_query_parser/parser.rl"
+#line 58 "ext/ragel_query_parser/parser.rl"
 
 /*
     parser = RagelQueryParser.new
@@ -46,12 +50,12 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
     }
 
     
-#line 50 "ext/ragel_query_parser/parser.c"
+#line 54 "ext/ragel_query_parser/parser.c"
 	{
 	cs = parser_start;
 	}
 
-#line 55 "ext/ragel_query_parser/parser.c"
+#line 59 "ext/ragel_query_parser/parser.c"
 	{
 	if ( p == pe )
 		goto _test_eof;
@@ -67,13 +71,13 @@ st0:
 cs = 0;
 	goto _out;
 tr0:
-#line 32 "ext/ragel_query_parser/parser.rl"
+#line 36 "ext/ragel_query_parser/parser.rl"
 	{
         reading_value = 0;
     }
 	goto st2;
 tr7:
-#line 20 "ext/ragel_query_parser/parser.rl"
+#line 24 "ext/ragel_query_parser/parser.rl"
 	{
         VALUE string = rb_obj_freeze(
             rb_funcall(unescaper, rb_intern("call"), 1, rb_enc_str_new(buffer, p - buffer, encoding))
@@ -85,7 +89,7 @@ tr7:
             current_key = rb_str_intern(string);
         }
     }
-#line 32 "ext/ragel_query_parser/parser.rl"
+#line 36 "ext/ragel_query_parser/parser.rl"
 	{
         reading_value = 0;
     }
@@ -94,7 +98,7 @@ st2:
 	if ( ++p == pe )
 		goto _test_eof2;
 case 2:
-#line 98 "ext/ragel_query_parser/parser.c"
+#line 102 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr2;
 		case 93: goto tr2;
@@ -114,7 +118,7 @@ case 2:
 		goto tr2;
 	goto st0;
 tr2:
-#line 16 "ext/ragel_query_parser/parser.rl"
+#line 20 "ext/ragel_query_parser/parser.rl"
 	{
         buffer = p;
     }
@@ -123,7 +127,7 @@ st3:
 	if ( ++p == pe )
 		goto _test_eof3;
 case 3:
-#line 127 "ext/ragel_query_parser/parser.c"
+#line 131 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st3;
 		case 61: goto tr4;
@@ -144,7 +148,7 @@ case 3:
 		goto st3;
 	goto st0;
 tr4:
-#line 20 "ext/ragel_query_parser/parser.rl"
+#line 24 "ext/ragel_query_parser/parser.rl"
 	{
         VALUE string = rb_obj_freeze(
             rb_funcall(unescaper, rb_intern("call"), 1, rb_enc_str_new(buffer, p - buffer, encoding))
@@ -161,7 +165,7 @@ st4:
 	if ( ++p == pe )
 		goto _test_eof4;
 case 4:
-#line 165 "ext/ragel_query_parser/parser.c"
+#line 169 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr5;
 		case 93: goto tr5;
@@ -181,11 +185,11 @@ case 4:
 		goto tr5;
 	goto st0;
 tr5:
-#line 36 "ext/ragel_query_parser/parser.rl"
+#line 40 "ext/ragel_query_parser/parser.rl"
 	{
         reading_value = 1;
     }
-#line 16 "ext/ragel_query_parser/parser.rl"
+#line 20 "ext/ragel_query_parser/parser.rl"
 	{
         buffer = p;
     }
@@ -194,7 +198,7 @@ st5:
 	if ( ++p == pe )
 		goto _test_eof5;
 case 5:
-#line 198 "ext/ragel_query_parser/parser.c"
+#line 202 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st5;
 		case 38: goto tr7;
@@ -223,7 +227,7 @@ case 5:
 	{
 	switch ( cs ) {
 	case 5: 
-#line 20 "ext/ragel_query_parser/parser.rl"
+#line 24 "ext/ragel_query_parser/parser.rl"
 	{
         VALUE string = rb_obj_freeze(
             rb_funcall(unescaper, rb_intern("call"), 1, rb_enc_str_new(buffer, p - buffer, encoding))
@@ -236,14 +240,14 @@ case 5:
         }
     }
 	break;
-#line 240 "ext/ragel_query_parser/parser.c"
+#line 244 "ext/ragel_query_parser/parser.c"
 	}
 	}
 
 	_out: {}
 	}
 
-#line 79 "ext/ragel_query_parser/parser.rl"
+#line 83 "ext/ragel_query_parser/parser.rl"
 
 
     return Qnil;
@@ -255,14 +259,15 @@ static VALUE parser_initialize(VALUE self) {
 }
 
 static VALUE unescape(VALUE self, VALUE string) {
-    VALUE rb_mEncoding = rb_const_get(rb_cObject, rb_intern("Encoding"));
-    VALUE utf_8 = rb_const_get(rb_mEncoding, rb_intern("UTF_8"));
-    VALUE rb_mUri = rb_const_get(rb_cObject, rb_intern("URI"));
     return rb_funcall(rb_mUri, rb_intern("decode_www_form_component"), 2, string, utf_8);
 }
 
 void Init_parser(VALUE rb_mRagelQueryParser) {
     VALUE rb_cParser = rb_define_class_under(rb_mRagelQueryParser, "Parser", rb_cObject);
+
+    rb_mEncoding = rb_const_get(rb_cObject, rb_intern("Encoding"));
+    utf_8 = rb_const_get(rb_mEncoding, rb_intern("UTF_8"));
+    rb_mUri = rb_const_get(rb_cObject, rb_intern("URI"));
 
     // TODO: better way of defining attr_reader from C?
     rb_funcall(rb_cParser, rb_intern("attr_reader"), 1, rb_obj_freeze(rb_str_new_cstr("parameters")));

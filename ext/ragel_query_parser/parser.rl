@@ -7,6 +7,10 @@
 
 #include "parser.h"
 
+static VALUE rb_mEncoding;
+static VALUE utf_8;
+static VALUE rb_mUri;
+
 %%{
     machine parser;
 
@@ -87,14 +91,15 @@ static VALUE parser_initialize(VALUE self) {
 }
 
 static VALUE unescape(VALUE self, VALUE string) {
-    VALUE rb_mEncoding = rb_const_get(rb_cObject, rb_intern("Encoding"));
-    VALUE utf_8 = rb_const_get(rb_mEncoding, rb_intern("UTF_8"));
-    VALUE rb_mUri = rb_const_get(rb_cObject, rb_intern("URI"));
     return rb_funcall(rb_mUri, rb_intern("decode_www_form_component"), 2, string, utf_8);
 }
 
 void Init_parser(VALUE rb_mRagelQueryParser) {
     VALUE rb_cParser = rb_define_class_under(rb_mRagelQueryParser, "Parser", rb_cObject);
+
+    rb_mEncoding = rb_const_get(rb_cObject, rb_intern("Encoding"));
+    utf_8 = rb_const_get(rb_mEncoding, rb_intern("UTF_8"));
+    rb_mUri = rb_const_get(rb_cObject, rb_intern("URI"));
 
     // TODO: better way of defining attr_reader from C?
     rb_funcall(rb_cParser, rb_intern("attr_reader"), 1, rb_obj_freeze(rb_str_new_cstr("parameters")));
