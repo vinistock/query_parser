@@ -18,13 +18,18 @@ static VALUE rb_mUri;
     # Actions
     ##
     action start_word {
+        encoded = 0;
         buffer = p;
     }
 
     action end_word {
-        VALUE string = rb_obj_freeze(
-            rb_funcall(unescaper, rb_intern("call"), 1, rb_enc_str_new(buffer, p - buffer, encoding))
-        );
+        VALUE string = rb_enc_str_new(buffer, p - buffer, encoding);
+
+        if (encoded) {
+            string = rb_funcall(unescaper, rb_intern("call"), 1, string);
+        }
+
+        string = rb_obj_freeze(string);
 
         if (reading_value) {
             rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, string);
@@ -41,12 +46,17 @@ static VALUE rb_mUri;
         reading_value = 1;
     }
 
+    action set_encoded {
+        encoded = 1;
+    }
+
     ##
     # Token action associations
     ##
     parameter_separator = ("?" | "&") >start_separator;
     key_value_separator = "=" %end_key_value_separator;
-    parameter_content = (alnum | "-" | "." | "_" | "~" | ":" | "/" | "#" | "[" | "]" | "@" | "!" | "$" | "'" | "(" | ")" | "*" | "+" | "," | ";" | "%")+ >start_word %end_word;
+    encoded_content = ('+' | '%' xdigit xdigit) >set_encoded;
+    parameter_content = (alnum | "-" | "." | "_" | "~" | ":" | "/" | "#" | "[" | "]" | "@" | "!" | "$" | "'" | "(" | ")" | "*" | "," | ";" | encoded_content)+ >start_word %end_word;
 
     ##
     # Main machine definition
@@ -70,7 +80,7 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
     const char *pe = p + RSTRING_LEN(query_string);
     const char *eof = pe;
     const char *buffer;
-    int cs = 0, reading_value = 0;
+    int cs = 0, reading_value = 0, encoded = 0;
     VALUE current_key = Qnil;
 
     if (NIL_P(unescaper)) {

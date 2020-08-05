@@ -17,9 +17,9 @@ class ParserTest < Minitest::Test
 
   def test_custom_unescaper
     parser = RagelQueryParser::Parser.new
-    parser.parse("?param_1=value_1&param_2=value_2") { |s| s.upcase }
+    parser.parse("?param_1=value_1&param_2=value%202") { |s| s.upcase.gsub("%20", " ") }
 
-    assert_equal "VALUE_1", parser.parameters[:PARAM_1]
-    assert_equal "VALUE_2", parser.parameters[:PARAM_2]
+    assert_equal "value_1", parser.parameters[:param_1]
+    assert_equal "VALUE 2", parser.parameters[:param_2]
   end
 end
