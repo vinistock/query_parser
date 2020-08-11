@@ -47,10 +47,10 @@ static VALUE rb_mUri;
         encoded = 1;
     }
 
-    parameter_separator = "&" >start_separator;
+    parameter_separator = [&;] >start_separator;
     key_value_separator = "=" %end_key_value_separator;
     encoded_content = ('+' | '%' xdigit xdigit) >set_encoded;
-    parameter_content = (alnum | "-" | "." | "_" | "~" | ":" | "/" | "#" | "[" | "]" | "@" | "!" | "$" | "'" | "(" | ")" | "*" | "," | ";" | encoded_content)+ >start_word %end_word;
+    parameter_content = (alnum | [\-._~:/#\[\]@!$'()*,] | encoded_content)+ >start_word %end_word;
     parameter = (parameter_content key_value_separator parameter_content);
 
     main := parameter (parameter_separator parameter)?+;

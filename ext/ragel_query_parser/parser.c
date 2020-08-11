@@ -99,7 +99,7 @@ case 1:
 	if ( (*p) < 39 ) {
 		if ( 35 <= (*p) && (*p) <= 36 )
 			goto tr0;
-	} else if ( (*p) > 59 ) {
+	} else if ( (*p) > 58 ) {
 		if ( (*p) > 91 ) {
 			if ( 97 <= (*p) && (*p) <= 122 )
 				goto tr0;
@@ -152,7 +152,7 @@ case 2:
 	if ( (*p) < 39 ) {
 		if ( 35 <= (*p) && (*p) <= 36 )
 			goto st2;
-	} else if ( (*p) > 59 ) {
+	} else if ( (*p) > 58 ) {
 		if ( (*p) > 91 ) {
 			if ( 97 <= (*p) && (*p) <= 122 )
 				goto st2;
@@ -239,7 +239,7 @@ case 5:
 	if ( (*p) < 39 ) {
 		if ( 35 <= (*p) && (*p) <= 36 )
 			goto tr9;
-	} else if ( (*p) > 59 ) {
+	} else if ( (*p) > 58 ) {
 		if ( (*p) > 91 ) {
 			if ( 97 <= (*p) && (*p) <= 122 )
 				goto tr9;
@@ -290,12 +290,13 @@ case 8:
 		case 37: goto tr14;
 		case 38: goto tr15;
 		case 43: goto tr16;
+		case 59: goto tr15;
 		case 93: goto st8;
 		case 95: goto st8;
 		case 126: goto st8;
 	}
 	if ( (*p) < 64 ) {
-		if ( 35 <= (*p) && (*p) <= 59 )
+		if ( 35 <= (*p) && (*p) <= 58 )
 			goto st8;
 	} else if ( (*p) > 91 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
@@ -328,7 +329,7 @@ st6:
 	if ( ++p == pe )
 		goto _test_eof6;
 case 6:
-#line 332 "ext/ragel_query_parser/parser.c"
+#line 333 "ext/ragel_query_parser/parser.c"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto st7;
@@ -383,7 +384,7 @@ case 7:
         }
     }
 	break;
-#line 387 "ext/ragel_query_parser/parser.c"
+#line 388 "ext/ragel_query_parser/parser.c"
 	}
 	}
 
