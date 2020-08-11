@@ -4,6 +4,7 @@
 #include <ruby.h>
 #include <string.h>
 #include <ruby/encoding.h>
+#include <ctype.h>
 
 void Init_parser(VALUE rb_mRagelQueryParser);
 

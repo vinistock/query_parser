@@ -11,14 +11,13 @@
 
 static VALUE rb_mEncoding;
 static VALUE utf_8;
-static VALUE rb_mUri;
 
 
-#line 57 "ext/ragel_query_parser/parser.rl"
+#line 56 "ext/ragel_query_parser/parser.rl"
 
 
 
-#line 22 "ext/ragel_query_parser/parser.c"
+#line 21 "ext/ragel_query_parser/parser.c"
 static const int parser_start = 1;
 static const int parser_first_final = 8;
 static const int parser_error = 0;
@@ -26,7 +25,7 @@ static const int parser_error = 0;
 static const int parser_en_main = 1;
 
 
-#line 60 "ext/ragel_query_parser/parser.rl"
+#line 59 "ext/ragel_query_parser/parser.rl"
 
 /*
     parser = RagelQueryParser.new
@@ -50,19 +49,19 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
     }
 
     
-#line 54 "ext/ragel_query_parser/parser.c"
+#line 53 "ext/ragel_query_parser/parser.c"
 	{
 	cs = parser_start;
 	}
 
-#line 59 "ext/ragel_query_parser/parser.c"
+#line 58 "ext/ragel_query_parser/parser.c"
 	{
 	if ( p == pe )
 		goto _test_eof;
 	switch ( cs )
 	{
 tr15:
-#line 22 "ext/ragel_query_parser/parser.rl"
+#line 21 "ext/ragel_query_parser/parser.rl"
 	{
         VALUE string = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -78,7 +77,7 @@ tr15:
             current_key = rb_str_intern(string);
         }
     }
-#line 38 "ext/ragel_query_parser/parser.rl"
+#line 37 "ext/ragel_query_parser/parser.rl"
 	{
         reading_value = 0;
     }
@@ -87,7 +86,7 @@ st1:
 	if ( ++p == pe )
 		goto _test_eof1;
 case 1:
-#line 91 "ext/ragel_query_parser/parser.c"
+#line 90 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr0;
 		case 37: goto tr2;
@@ -112,25 +111,25 @@ st0:
 cs = 0;
 	goto _out;
 tr0:
-#line 17 "ext/ragel_query_parser/parser.rl"
+#line 16 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
 	goto st2;
 tr3:
-#line 17 "ext/ragel_query_parser/parser.rl"
+#line 16 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-#line 46 "ext/ragel_query_parser/parser.rl"
+#line 45 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st2;
 tr6:
-#line 46 "ext/ragel_query_parser/parser.rl"
+#line 45 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -139,7 +138,7 @@ st2:
 	if ( ++p == pe )
 		goto _test_eof2;
 case 2:
-#line 143 "ext/ragel_query_parser/parser.c"
+#line 142 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st2;
 		case 37: goto tr5;
@@ -162,18 +161,18 @@ case 2:
 		goto st2;
 	goto st0;
 tr2:
-#line 17 "ext/ragel_query_parser/parser.rl"
+#line 16 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-#line 46 "ext/ragel_query_parser/parser.rl"
+#line 45 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st3;
 tr5:
-#line 46 "ext/ragel_query_parser/parser.rl"
+#line 45 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -182,7 +181,7 @@ st3:
 	if ( ++p == pe )
 		goto _test_eof3;
 case 3:
-#line 186 "ext/ragel_query_parser/parser.c"
+#line 185 "ext/ragel_query_parser/parser.c"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto st4;
@@ -206,7 +205,7 @@ case 4:
 		goto st2;
 	goto st0;
 tr7:
-#line 22 "ext/ragel_query_parser/parser.rl"
+#line 21 "ext/ragel_query_parser/parser.rl"
 	{
         VALUE string = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -227,7 +226,7 @@ st5:
 	if ( ++p == pe )
 		goto _test_eof5;
 case 5:
-#line 231 "ext/ragel_query_parser/parser.c"
+#line 230 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr9;
 		case 37: goto tr10;
@@ -249,33 +248,33 @@ case 5:
 		goto tr9;
 	goto st0;
 tr16:
-#line 46 "ext/ragel_query_parser/parser.rl"
+#line 45 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st8;
 tr9:
-#line 42 "ext/ragel_query_parser/parser.rl"
+#line 41 "ext/ragel_query_parser/parser.rl"
 	{
         reading_value = 1;
     }
-#line 17 "ext/ragel_query_parser/parser.rl"
+#line 16 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
 	goto st8;
 tr11:
-#line 42 "ext/ragel_query_parser/parser.rl"
+#line 41 "ext/ragel_query_parser/parser.rl"
 	{
         reading_value = 1;
     }
-#line 17 "ext/ragel_query_parser/parser.rl"
+#line 16 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-#line 46 "ext/ragel_query_parser/parser.rl"
+#line 45 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -284,7 +283,7 @@ st8:
 	if ( ++p == pe )
 		goto _test_eof8;
 case 8:
-#line 288 "ext/ragel_query_parser/parser.c"
+#line 287 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st8;
 		case 37: goto tr14;
@@ -305,22 +304,22 @@ case 8:
 		goto st8;
 	goto st0;
 tr14:
-#line 46 "ext/ragel_query_parser/parser.rl"
+#line 45 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st6;
 tr10:
-#line 42 "ext/ragel_query_parser/parser.rl"
+#line 41 "ext/ragel_query_parser/parser.rl"
 	{
         reading_value = 1;
     }
-#line 17 "ext/ragel_query_parser/parser.rl"
+#line 16 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-#line 46 "ext/ragel_query_parser/parser.rl"
+#line 45 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -329,7 +328,7 @@ st6:
 	if ( ++p == pe )
 		goto _test_eof6;
 case 6:
-#line 333 "ext/ragel_query_parser/parser.c"
+#line 332 "ext/ragel_query_parser/parser.c"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto st7;
@@ -367,7 +366,7 @@ case 7:
 	{
 	switch ( cs ) {
 	case 8: 
-#line 22 "ext/ragel_query_parser/parser.rl"
+#line 21 "ext/ragel_query_parser/parser.rl"
 	{
         VALUE string = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -384,14 +383,14 @@ case 7:
         }
     }
 	break;
-#line 388 "ext/ragel_query_parser/parser.c"
+#line 387 "ext/ragel_query_parser/parser.c"
 	}
 	}
 
 	_out: {}
 	}
 
-#line 85 "ext/ragel_query_parser/parser.rl"
+#line 84 "ext/ragel_query_parser/parser.rl"
 
 
     return Qnil;
@@ -402,8 +401,42 @@ static VALUE parser_initialize(VALUE self) {
     return self;
 }
 
+static char from_hex(char ch) {
+    return isdigit(ch) ? ch - '0' : tolower(ch) - 'a' + 10;
+}
+
 static VALUE unescape(VALUE self, VALUE string) {
-    return rb_funcall(rb_mUri, rb_intern("decode_www_form_component"), 2, string, utf_8);
+    VALUE regex = rb_funcall(rb_const_get(rb_cObject, rb_intern("Regexp")), rb_intern("new"), 1, rb_str_new_cstr("%(?!\\h\\h)"));
+
+    rb_p(regex);
+
+    if (RTEST(rb_funcall(regex, rb_intern("=~"), 1, string))) {
+        rb_raise(rb_eArgError, "invalid encoding");
+    }
+
+    char *str = RSTRING_PTR(string);
+    char *pstr = str, *buf = malloc(strlen(str) + 1), *pbuf = buf;
+    VALUE decoded_url;
+
+    while (*pstr) {
+        if (*pstr == '%') {
+            if (pstr[1] && pstr[2]) {
+                *pbuf++ = from_hex(pstr[1]) << 4 | from_hex(pstr[2]);
+                pstr += 2;
+            }
+        } else if (*pstr == '+') {
+            *pbuf++ = ' ';
+        } else {
+            *pbuf++ = *pstr;
+        }
+
+        pstr++;
+    }
+
+    *pbuf = '\0';
+    decoded_url = rb_str_new_cstr(buf);
+    free(buf);
+    return rb_funcall(decoded_url, rb_intern("force_encoding"), 1, utf_8);
 }
 
 void Init_parser(VALUE rb_mRagelQueryParser) {
@@ -411,7 +444,6 @@ void Init_parser(VALUE rb_mRagelQueryParser) {
 
     rb_mEncoding = rb_const_get(rb_cObject, rb_intern("Encoding"));
     utf_8 = rb_const_get(rb_mEncoding, rb_intern("UTF_8"));
-    rb_mUri = rb_const_get(rb_cObject, rb_intern("URI"));
 
     // TODO: better way of defining attr_reader from C?
     rb_funcall(rb_cParser, rb_intern("attr_reader"), 1, rb_obj_freeze(rb_str_new_cstr("parameters")));

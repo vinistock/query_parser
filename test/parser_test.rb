@@ -37,4 +37,28 @@ class ParserTest < Minitest::Test
     assert_equal "value_1", parser.parameters[:param_1]
     assert_equal "VALUE 2", parser.parameters[:param_2]
   end
+
+  def test_unescape_ruby_spec
+    assert_equal(
+      "  !\"\#$%&'()*+,-./09:;<=>?@AZ[\\]^_`az{|}~",
+      unescape("%20+%21%22%23%24%25%26%27%28%29*%2B%2C-.%2F09%3A%3B%3C%3D%3E%3F%40AZ%5B%5C%5D%5E_%60az%7B%7C%7D%7E")
+    )
+
+    assert_equal(
+      (+"\xE3\x81\x82\xE3\x81\x82").force_encoding("UTF-8"),
+      unescape((+"\xE3\x81\x82%E3%81%82").force_encoding("UTF-8"))
+    )
+  end
+
+  def test_unescape_errors
+    assert_raises(ArgumentError) { unescape("%") }
+    assert_raises(ArgumentError) { unescape("%a") }
+    assert_raises(ArgumentError) { unescape("x%a_") }
+  end
+
+  private
+
+  def unescape(string)
+    RagelQueryParser::Parser.unescape(string)
+  end
 end

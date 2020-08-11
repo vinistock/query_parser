@@ -9,7 +9,6 @@
 
 static VALUE rb_mEncoding;
 static VALUE utf_8;
-static VALUE rb_mUri;
 
 %%{
     machine parser;
@@ -92,8 +91,40 @@ static VALUE parser_initialize(VALUE self) {
     return self;
 }
 
+static char from_hex(char ch) {
+    return isdigit(ch) ? ch - '0' : tolower(ch) - 'a' + 10;
+}
+
 static VALUE unescape(VALUE self, VALUE string) {
-    return rb_funcall(rb_mUri, rb_intern("decode_www_form_component"), 2, string, utf_8);
+    VALUE regex = rb_funcall(rb_const_get(rb_cObject, rb_intern("Regexp")), rb_intern("new"), 1, rb_str_new_cstr("%(?!\\h\\h)"));
+
+    if (RTEST(rb_funcall(regex, rb_intern("=~"), 1, string))) {
+        rb_raise(rb_eArgError, "invalid encoding");
+    }
+
+    char *str = RSTRING_PTR(string);
+    char *pstr = str, *buf = malloc(strlen(str) + 1), *pbuf = buf;
+    VALUE decoded_url;
+
+    while (*pstr) {
+        if (*pstr == '%') {
+            if (pstr[1] && pstr[2]) {
+                *pbuf++ = from_hex(pstr[1]) << 4 | from_hex(pstr[2]);
+                pstr += 2;
+            }
+        } else if (*pstr == '+') {
+            *pbuf++ = ' ';
+        } else {
+            *pbuf++ = *pstr;
+        }
+
+        pstr++;
+    }
+
+    *pbuf = '\0';
+    decoded_url = rb_str_new_cstr(buf);
+    free(buf);
+    return rb_funcall(decoded_url, rb_intern("force_encoding"), 1, utf_8);
 }
 
 void Init_parser(VALUE rb_mRagelQueryParser) {
@@ -101,7 +132,6 @@ void Init_parser(VALUE rb_mRagelQueryParser) {
 
     rb_mEncoding = rb_const_get(rb_cObject, rb_intern("Encoding"));
     utf_8 = rb_const_get(rb_mEncoding, rb_intern("UTF_8"));
-    rb_mUri = rb_const_get(rb_cObject, rb_intern("URI"));
 
     // TODO: better way of defining attr_reader from C?
     rb_funcall(rb_cParser, rb_intern("attr_reader"), 1, rb_obj_freeze(rb_str_new_cstr("parameters")));
