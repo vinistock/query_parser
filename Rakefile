@@ -15,6 +15,7 @@ task :ragel do
   ext_path = "ext/ragel_query_parser"
   puts "Compiling Ragel..."
   system("ragel #{ext_path}/parser.rl -C -G2 -I ext/ragel_query_parser -o #{ext_path}/parser.c")
+  abort unless $CHILD_STATUS.success?
 end
 
 task make: %i[clobber ragel compile]

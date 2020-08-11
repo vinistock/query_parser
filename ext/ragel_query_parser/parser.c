@@ -14,19 +14,19 @@ static VALUE utf_8;
 static VALUE rb_mUri;
 
 
-#line 65 "ext/ragel_query_parser/parser.rl"
+#line 57 "ext/ragel_query_parser/parser.rl"
 
 
 
 #line 22 "ext/ragel_query_parser/parser.c"
 static const int parser_start = 1;
-static const int parser_first_final = 9;
+static const int parser_first_final = 8;
 static const int parser_error = 0;
 
 static const int parser_en_main = 1;
 
 
-#line 68 "ext/ragel_query_parser/parser.rl"
+#line 60 "ext/ragel_query_parser/parser.rl"
 
 /*
     parser = RagelQueryParser.new
@@ -61,23 +61,8 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
 		goto _test_eof;
 	switch ( cs )
 	{
-case 1:
-	switch( (*p) ) {
-		case 38: goto tr0;
-		case 63: goto tr0;
-	}
-	goto st0;
-st0:
-cs = 0;
-	goto _out;
-tr0:
-#line 41 "ext/ragel_query_parser/parser.rl"
-	{
-        reading_value = 0;
-    }
-	goto st2;
-tr16:
-#line 25 "ext/ragel_query_parser/parser.rl"
+tr15:
+#line 22 "ext/ragel_query_parser/parser.rl"
 	{
         VALUE string = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -93,56 +78,102 @@ tr16:
             current_key = rb_str_intern(string);
         }
     }
-#line 41 "ext/ragel_query_parser/parser.rl"
+#line 38 "ext/ragel_query_parser/parser.rl"
 	{
         reading_value = 0;
+    }
+	goto st1;
+st1:
+	if ( ++p == pe )
+		goto _test_eof1;
+case 1:
+#line 91 "ext/ragel_query_parser/parser.c"
+	switch( (*p) ) {
+		case 33: goto tr0;
+		case 37: goto tr2;
+		case 43: goto tr3;
+		case 93: goto tr0;
+		case 95: goto tr0;
+		case 126: goto tr0;
+	}
+	if ( (*p) < 39 ) {
+		if ( 35 <= (*p) && (*p) <= 36 )
+			goto tr0;
+	} else if ( (*p) > 59 ) {
+		if ( (*p) > 91 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto tr0;
+		} else if ( (*p) >= 64 )
+			goto tr0;
+	} else
+		goto tr0;
+	goto st0;
+st0:
+cs = 0;
+	goto _out;
+tr0:
+#line 17 "ext/ragel_query_parser/parser.rl"
+	{
+        encoded = 0;
+        buffer = p;
+    }
+	goto st2;
+tr3:
+#line 17 "ext/ragel_query_parser/parser.rl"
+	{
+        encoded = 0;
+        buffer = p;
+    }
+#line 46 "ext/ragel_query_parser/parser.rl"
+	{
+        encoded = 1;
+    }
+	goto st2;
+tr6:
+#line 46 "ext/ragel_query_parser/parser.rl"
+	{
+        encoded = 1;
     }
 	goto st2;
 st2:
 	if ( ++p == pe )
 		goto _test_eof2;
 case 2:
-#line 106 "ext/ragel_query_parser/parser.c"
+#line 143 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
-		case 33: goto tr2;
-		case 37: goto tr3;
-		case 43: goto tr4;
-		case 93: goto tr2;
-		case 95: goto tr2;
-		case 126: goto tr2;
+		case 33: goto st2;
+		case 37: goto tr5;
+		case 43: goto tr6;
+		case 61: goto tr7;
+		case 93: goto st2;
+		case 95: goto st2;
+		case 126: goto st2;
 	}
 	if ( (*p) < 39 ) {
 		if ( 35 <= (*p) && (*p) <= 36 )
-			goto tr2;
+			goto st2;
 	} else if ( (*p) > 59 ) {
 		if ( (*p) > 91 ) {
 			if ( 97 <= (*p) && (*p) <= 122 )
-				goto tr2;
+				goto st2;
 		} else if ( (*p) >= 64 )
-			goto tr2;
+			goto st2;
 	} else
-		goto tr2;
+		goto st2;
 	goto st0;
 tr2:
-#line 20 "ext/ragel_query_parser/parser.rl"
+#line 17 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-	goto st3;
-tr4:
-#line 20 "ext/ragel_query_parser/parser.rl"
-	{
-        encoded = 0;
-        buffer = p;
-    }
-#line 49 "ext/ragel_query_parser/parser.rl"
+#line 46 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st3;
-tr7:
-#line 49 "ext/ragel_query_parser/parser.rl"
+tr5:
+#line 46 "ext/ragel_query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -151,74 +182,31 @@ st3:
 	if ( ++p == pe )
 		goto _test_eof3;
 case 3:
-#line 155 "ext/ragel_query_parser/parser.c"
-	switch( (*p) ) {
-		case 33: goto st3;
-		case 37: goto tr6;
-		case 43: goto tr7;
-		case 61: goto tr8;
-		case 93: goto st3;
-		case 95: goto st3;
-		case 126: goto st3;
-	}
-	if ( (*p) < 39 ) {
-		if ( 35 <= (*p) && (*p) <= 36 )
-			goto st3;
-	} else if ( (*p) > 59 ) {
-		if ( (*p) > 91 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st3;
-		} else if ( (*p) >= 64 )
-			goto st3;
+#line 186 "ext/ragel_query_parser/parser.c"
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st4;
+	} else if ( (*p) > 70 ) {
+		if ( 97 <= (*p) && (*p) <= 102 )
+			goto st4;
 	} else
-		goto st3;
+		goto st4;
 	goto st0;
-tr3:
-#line 20 "ext/ragel_query_parser/parser.rl"
-	{
-        encoded = 0;
-        buffer = p;
-    }
-#line 49 "ext/ragel_query_parser/parser.rl"
-	{
-        encoded = 1;
-    }
-	goto st4;
-tr6:
-#line 49 "ext/ragel_query_parser/parser.rl"
-	{
-        encoded = 1;
-    }
-	goto st4;
 st4:
 	if ( ++p == pe )
 		goto _test_eof4;
 case 4:
-#line 198 "ext/ragel_query_parser/parser.c"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st5;
+			goto st2;
 	} else if ( (*p) > 70 ) {
 		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st5;
+			goto st2;
 	} else
-		goto st5;
+		goto st2;
 	goto st0;
-st5:
-	if ( ++p == pe )
-		goto _test_eof5;
-case 5:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st3;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st3;
-	} else
-		goto st3;
-	goto st0;
-tr8:
-#line 25 "ext/ragel_query_parser/parser.rl"
+tr7:
+#line 22 "ext/ragel_query_parser/parser.rl"
 	{
         VALUE string = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -234,114 +222,126 @@ tr8:
             current_key = rb_str_intern(string);
         }
     }
+	goto st5;
+st5:
+	if ( ++p == pe )
+		goto _test_eof5;
+case 5:
+#line 231 "ext/ragel_query_parser/parser.c"
+	switch( (*p) ) {
+		case 33: goto tr9;
+		case 37: goto tr10;
+		case 43: goto tr11;
+		case 93: goto tr9;
+		case 95: goto tr9;
+		case 126: goto tr9;
+	}
+	if ( (*p) < 39 ) {
+		if ( 35 <= (*p) && (*p) <= 36 )
+			goto tr9;
+	} else if ( (*p) > 59 ) {
+		if ( (*p) > 91 ) {
+			if ( 97 <= (*p) && (*p) <= 122 )
+				goto tr9;
+		} else if ( (*p) >= 64 )
+			goto tr9;
+	} else
+		goto tr9;
+	goto st0;
+tr16:
+#line 46 "ext/ragel_query_parser/parser.rl"
+	{
+        encoded = 1;
+    }
+	goto st8;
+tr9:
+#line 42 "ext/ragel_query_parser/parser.rl"
+	{
+        reading_value = 1;
+    }
+#line 17 "ext/ragel_query_parser/parser.rl"
+	{
+        encoded = 0;
+        buffer = p;
+    }
+	goto st8;
+tr11:
+#line 42 "ext/ragel_query_parser/parser.rl"
+	{
+        reading_value = 1;
+    }
+#line 17 "ext/ragel_query_parser/parser.rl"
+	{
+        encoded = 0;
+        buffer = p;
+    }
+#line 46 "ext/ragel_query_parser/parser.rl"
+	{
+        encoded = 1;
+    }
+	goto st8;
+st8:
+	if ( ++p == pe )
+		goto _test_eof8;
+case 8:
+#line 288 "ext/ragel_query_parser/parser.c"
+	switch( (*p) ) {
+		case 33: goto st8;
+		case 37: goto tr14;
+		case 38: goto tr15;
+		case 43: goto tr16;
+		case 93: goto st8;
+		case 95: goto st8;
+		case 126: goto st8;
+	}
+	if ( (*p) < 64 ) {
+		if ( 35 <= (*p) && (*p) <= 59 )
+			goto st8;
+	} else if ( (*p) > 91 ) {
+		if ( 97 <= (*p) && (*p) <= 122 )
+			goto st8;
+	} else
+		goto st8;
+	goto st0;
+tr14:
+#line 46 "ext/ragel_query_parser/parser.rl"
+	{
+        encoded = 1;
+    }
+	goto st6;
+tr10:
+#line 42 "ext/ragel_query_parser/parser.rl"
+	{
+        reading_value = 1;
+    }
+#line 17 "ext/ragel_query_parser/parser.rl"
+	{
+        encoded = 0;
+        buffer = p;
+    }
+#line 46 "ext/ragel_query_parser/parser.rl"
+	{
+        encoded = 1;
+    }
 	goto st6;
 st6:
 	if ( ++p == pe )
 		goto _test_eof6;
 case 6:
-#line 243 "ext/ragel_query_parser/parser.c"
-	switch( (*p) ) {
-		case 33: goto tr10;
-		case 37: goto tr11;
-		case 43: goto tr12;
-		case 93: goto tr10;
-		case 95: goto tr10;
-		case 126: goto tr10;
-	}
-	if ( (*p) < 39 ) {
-		if ( 35 <= (*p) && (*p) <= 36 )
-			goto tr10;
-	} else if ( (*p) > 59 ) {
-		if ( (*p) > 91 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto tr10;
-		} else if ( (*p) >= 64 )
-			goto tr10;
+#line 332 "ext/ragel_query_parser/parser.c"
+	if ( (*p) < 65 ) {
+		if ( 48 <= (*p) && (*p) <= 57 )
+			goto st7;
+	} else if ( (*p) > 70 ) {
+		if ( 97 <= (*p) && (*p) <= 102 )
+			goto st7;
 	} else
-		goto tr10;
+		goto st7;
 	goto st0;
-tr17:
-#line 49 "ext/ragel_query_parser/parser.rl"
-	{
-        encoded = 1;
-    }
-	goto st9;
-tr10:
-#line 45 "ext/ragel_query_parser/parser.rl"
-	{
-        reading_value = 1;
-    }
-#line 20 "ext/ragel_query_parser/parser.rl"
-	{
-        encoded = 0;
-        buffer = p;
-    }
-	goto st9;
-tr12:
-#line 45 "ext/ragel_query_parser/parser.rl"
-	{
-        reading_value = 1;
-    }
-#line 20 "ext/ragel_query_parser/parser.rl"
-	{
-        encoded = 0;
-        buffer = p;
-    }
-#line 49 "ext/ragel_query_parser/parser.rl"
-	{
-        encoded = 1;
-    }
-	goto st9;
-st9:
-	if ( ++p == pe )
-		goto _test_eof9;
-case 9:
-#line 300 "ext/ragel_query_parser/parser.c"
-	switch( (*p) ) {
-		case 33: goto st9;
-		case 37: goto tr15;
-		case 38: goto tr16;
-		case 43: goto tr17;
-		case 63: goto tr16;
-		case 93: goto st9;
-		case 95: goto st9;
-		case 126: goto st9;
-	}
-	if ( (*p) < 64 ) {
-		if ( 35 <= (*p) && (*p) <= 59 )
-			goto st9;
-	} else if ( (*p) > 91 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st9;
-	} else
-		goto st9;
-	goto st0;
-tr15:
-#line 49 "ext/ragel_query_parser/parser.rl"
-	{
-        encoded = 1;
-    }
-	goto st7;
-tr11:
-#line 45 "ext/ragel_query_parser/parser.rl"
-	{
-        reading_value = 1;
-    }
-#line 20 "ext/ragel_query_parser/parser.rl"
-	{
-        encoded = 0;
-        buffer = p;
-    }
-#line 49 "ext/ragel_query_parser/parser.rl"
-	{
-        encoded = 1;
-    }
-	goto st7;
 st7:
 	if ( ++p == pe )
 		goto _test_eof7;
 case 7:
-#line 345 "ext/ragel_query_parser/parser.c"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto st8;
@@ -351,35 +351,22 @@ case 7:
 	} else
 		goto st8;
 	goto st0;
-st8:
-	if ( ++p == pe )
-		goto _test_eof8;
-case 8:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st9;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st9;
-	} else
-		goto st9;
-	goto st0;
 	}
+	_test_eof1: cs = 1; goto _test_eof; 
 	_test_eof2: cs = 2; goto _test_eof; 
 	_test_eof3: cs = 3; goto _test_eof; 
 	_test_eof4: cs = 4; goto _test_eof; 
 	_test_eof5: cs = 5; goto _test_eof; 
-	_test_eof6: cs = 6; goto _test_eof; 
-	_test_eof9: cs = 9; goto _test_eof; 
-	_test_eof7: cs = 7; goto _test_eof; 
 	_test_eof8: cs = 8; goto _test_eof; 
+	_test_eof6: cs = 6; goto _test_eof; 
+	_test_eof7: cs = 7; goto _test_eof; 
 
 	_test_eof: {}
 	if ( p == eof )
 	{
 	switch ( cs ) {
-	case 9: 
-#line 25 "ext/ragel_query_parser/parser.rl"
+	case 8: 
+#line 22 "ext/ragel_query_parser/parser.rl"
 	{
         VALUE string = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -396,14 +383,14 @@ case 8:
         }
     }
 	break;
-#line 400 "ext/ragel_query_parser/parser.c"
+#line 387 "ext/ragel_query_parser/parser.c"
 	}
 	}
 
 	_out: {}
 	}
 
-#line 93 "ext/ragel_query_parser/parser.rl"
+#line 85 "ext/ragel_query_parser/parser.rl"
 
 
     return Qnil;
