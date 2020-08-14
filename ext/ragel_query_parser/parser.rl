@@ -46,13 +46,18 @@ static VALUE utf_8;
         encoded = 1;
     }
 
+    action raise_argument_error {
+        rb_raise(rb_eArgError, "invalid encoding");
+    }
+
     parameter_separator = [&;] >start_separator;
     key_value_separator = "=" %end_key_value_separator;
-    encoded_content = ('+' | '%' xdigit xdigit) >set_encoded;
+    encoded_content = ("+" | "%" xdigit xdigit) >set_encoded;
+    invalid_encoded_content = ("%" ^digit ^digit?) %raise_argument_error;
     parameter_content = (alnum | [\-._~:/#\[\]@!$'()*,] | encoded_content)+ >start_word %end_word;
     parameter = (parameter_content key_value_separator parameter_content);
 
-    main := parameter (parameter_separator parameter)?+;
+    main := (any* invalid_encoded_content any*) | (parameter (parameter_separator parameter)*);
 }%%
 
 %% write data;
@@ -96,12 +101,6 @@ static char from_hex(char ch) {
 }
 
 static VALUE unescape(VALUE self, VALUE string) {
-    VALUE regex = rb_funcall(rb_const_get(rb_cObject, rb_intern("Regexp")), rb_intern("new"), 1, rb_str_new_cstr("%(?!\\h\\h)"));
-
-    if (RTEST(rb_funcall(regex, rb_intern("=~"), 1, string))) {
-        rb_raise(rb_eArgError, "invalid encoding");
-    }
-
     char *str = RSTRING_PTR(string);
     char *pstr = str, *buf = malloc(strlen(str) + 1), *pbuf = buf;
     VALUE decoded_url;

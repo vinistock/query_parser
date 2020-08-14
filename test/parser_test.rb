@@ -50,10 +50,11 @@ class ParserTest < Minitest::Test
     )
   end
 
-  def test_unescape_errors
-    assert_raises(ArgumentError) { unescape("%") }
-    assert_raises(ArgumentError) { unescape("%a") }
-    assert_raises(ArgumentError) { unescape("x%a_") }
+  def test_invalid_encoded_content
+    parser = RagelQueryParser::Parser.new
+
+    assert_raises(ArgumentError) { parser.parse("%a") }
+    assert_raises(ArgumentError) { parser.parse("x%a_") }
   end
 
   private
