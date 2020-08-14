@@ -25,17 +25,21 @@ static VALUE utf_8;
             string = rb_funcall(unescaper, rb_intern("call"), 1, string);
         }
 
-        string = rb_obj_freeze(string);
-
         if (reading_value) {
-            rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, string);
+            if (array_parameter) {
+                rb_funcall(current_key, rb_intern("delete!"), 1, rb_obj_freeze(rb_str_new_cstr("[]")));
+                rb_hash_aset(rb_iv_get(self, "@parameters"), rb_str_intern(rb_obj_freeze(current_key)), rb_str_split(string, ","));
+            } else {
+                rb_hash_aset(rb_iv_get(self, "@parameters"), rb_str_intern(rb_obj_freeze(current_key)), string);
+            }
         } else {
-            current_key = rb_str_intern(string);
+            current_key = string;
         }
     }
 
     action start_separator {
         reading_value = 0;
+        array_parameter = 0;
     }
 
     action end_key_value_separator {
@@ -50,12 +54,18 @@ static VALUE utf_8;
         rb_raise(rb_eArgError, "invalid encoding");
     }
 
+    action set_array_parameter {
+        reading_value = 1;
+        array_parameter = 1;
+    }
+
     parameter_separator = [&;] >start_separator;
     key_value_separator = "=" %end_key_value_separator;
     encoded_content = ("+" | "%" xdigit xdigit) >set_encoded;
     invalid_encoded_content = ("%" ^digit ^digit?) %raise_argument_error;
+    array_separator = "[]=" %set_array_parameter;
     parameter_content = (alnum | [\-._~:/#\[\]@!$'()*,] | encoded_content)+ >start_word %end_word;
-    parameter = (parameter_content key_value_separator parameter_content);
+    parameter = (parameter_content (key_value_separator | array_separator) parameter_content);
 
     main := (any* invalid_encoded_content any*) | (parameter (parameter_separator parameter)*);
 }%%
@@ -76,7 +86,7 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
     const char *pe = p + RSTRING_LEN(query_string);
     const char *eof = pe;
     const char *buffer;
-    int cs = 0, reading_value = 0, encoded = 0;
+    int cs = 0, reading_value = 0, array_parameter = 0, encoded = 0;
     VALUE current_key = Qnil;
 
     if (NIL_P(unescaper)) {
@@ -88,7 +98,7 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
         write exec;
     }%%
 
-    return Qnil;
+    return rb_iv_get(self, "@parameters");
 }
 
 static VALUE parser_initialize(VALUE self) {

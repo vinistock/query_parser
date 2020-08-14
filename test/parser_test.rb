@@ -30,6 +30,13 @@ class ParserTest < Minitest::Test
     assert_equal "value 2", parser.parameters[:param_2]
   end
 
+  def test_array_parameters
+    parser = RagelQueryParser::Parser.new
+    expected = { countries: %w[BR US ES], languages: %w[PT EN ES] }
+
+    assert_equal expected, parser.parse("countries[]=BR,US,ES&languages[]=PT,EN,ES")
+  end
+
   def test_custom_unescaper
     parser = RagelQueryParser::Parser.new
     parser.parse("param_1=value_1&param_2=value%202") { |s| s.upcase.gsub("%20", " ") }
