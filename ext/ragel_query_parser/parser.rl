@@ -18,34 +18,6 @@ static VALUE utf_8;
         buffer = p;
     }
 
-    action end_word {
-        VALUE string = rb_enc_str_new(buffer, p - buffer, encoding);
-
-        if (encoded) {
-            string = rb_funcall(unescaper, rb_intern("call"), 1, string);
-        }
-
-        if (reading_value) {
-            if (array_parameter) {
-                rb_funcall(current_key, rb_intern("delete!"), 1, rb_obj_freeze(rb_str_new_cstr("[]")));
-                rb_hash_aset(rb_iv_get(self, "@parameters"), rb_str_intern(rb_obj_freeze(current_key)), rb_str_split(string, ","));
-            } else {
-                rb_hash_aset(rb_iv_get(self, "@parameters"), rb_str_intern(rb_obj_freeze(current_key)), string);
-            }
-        } else {
-            current_key = string;
-        }
-    }
-
-    action start_separator {
-        reading_value = 0;
-        array_parameter = 0;
-    }
-
-    action end_key_value_separator {
-        reading_value = 1;
-    }
-
     action set_encoded {
         encoded = 1;
     }
@@ -54,18 +26,37 @@ static VALUE utf_8;
         rb_raise(rb_eArgError, "invalid encoding");
     }
 
-    action set_array_parameter {
-        reading_value = 1;
-        array_parameter = 1;
+    action parameter_key {
+        current_key = rb_enc_str_new(buffer, p - buffer, encoding);
+
+        if (encoded) current_key = rb_funcall(unescaper, rb_intern("call"), 1, current_key);
+
+        current_key = rb_str_intern(rb_obj_freeze(current_key));
     }
 
-    parameter_separator = [&;] >start_separator;
-    key_value_separator = "=" %end_key_value_separator;
+    action regular_parameter_value {
+        current_value = rb_enc_str_new(buffer, p - buffer, encoding);
+
+        if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
+
+        rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, current_value);
+    }
+
+    action array_parameter_value {
+        current_value = rb_enc_str_new(buffer, p - buffer, encoding);
+
+        if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
+
+        rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, rb_str_split(current_value, ","));
+    }
+
+    parameter_separator = [&;];
     encoded_content = ("+" | "%" xdigit xdigit) >set_encoded;
     invalid_encoded_content = ("%" ^digit ^digit?) %raise_argument_error;
-    array_separator = "[]=" %set_array_parameter;
-    parameter_content = (alnum | [\-._~:/#\[\]@!$'()*,] | encoded_content)+ >start_word %end_word;
-    parameter = (parameter_content (key_value_separator | array_separator) parameter_content);
+    parameter_content = (alnum | [\-._~:/#@!$'()*,] | encoded_content)+ >start_word;
+    regular_parameter = parameter_content %parameter_key "=" parameter_content %regular_parameter_value;
+    array_parameter = parameter_content %parameter_key "[]=" parameter_content %array_parameter_value;
+    parameter = array_parameter | regular_parameter;
 
     main := (any* invalid_encoded_content any*) | (parameter (parameter_separator parameter)*);
 }%%
@@ -86,8 +77,8 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
     const char *pe = p + RSTRING_LEN(query_string);
     const char *eof = pe;
     const char *buffer;
-    int cs = 0, reading_value = 0, array_parameter = 0, encoded = 0;
-    VALUE current_key = Qnil;
+    int cs = 0, encoded = 0;
+    VALUE current_key = Qnil, current_value = Qnil;
 
     if (NIL_P(unescaper)) {
         unescaper = rb_funcall(rb_obj_class(self), rb_intern("method"), 1, rb_obj_freeze(rb_str_new_cstr("unescape")));
