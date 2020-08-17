@@ -9,14 +9,14 @@ class ParserTest < Minitest::Test
 
   def test_single_param_parse
     parser = RagelQueryParser::Parser.new
-    parser.parse("param_1=value_1")
+    parser.parse_query("param_1=value_1")
 
     assert_equal "value_1", parser.parameters[:param_1]
   end
 
   def test_two_param_parse
     parser = RagelQueryParser::Parser.new
-    parser.parse("param_1=value_1&param_2=value%202")
+    parser.parse_query("param_1=value_1&param_2=value%202")
 
     assert_equal "value_1", parser.parameters[:param_1]
     assert_equal "value 2", parser.parameters[:param_2]
@@ -24,7 +24,7 @@ class ParserTest < Minitest::Test
 
   def test_semicolon_separator
     parser = RagelQueryParser::Parser.new
-    parser.parse("param_1=value_1;param_2=value%202")
+    parser.parse_query("param_1=value_1;param_2=value%202")
 
     assert_equal "value_1", parser.parameters[:param_1]
     assert_equal "value 2", parser.parameters[:param_2]
@@ -34,12 +34,12 @@ class ParserTest < Minitest::Test
     parser = RagelQueryParser::Parser.new
     expected = { countries: %w[BR US ES], languages: %w[PT EN ES] }
 
-    assert_equal expected, parser.parse("countries[]=BR,US,ES&languages[]=PT,EN,ES")
+    assert_equal expected, parser.parse_query("countries[]=BR,US,ES&languages[]=PT,EN,ES")
   end
 
   def test_custom_unescaper
     parser = RagelQueryParser::Parser.new
-    parser.parse("param_1=value_1&param_2=value%202") { |s| s.upcase.gsub("%20", " ") }
+    parser.parse_query("param_1=value_1&param_2=value%202") { |s| s.upcase.gsub("%20", " ") }
 
     assert_equal "value_1", parser.parameters[:param_1]
     assert_equal "VALUE 2", parser.parameters[:param_2]
@@ -60,8 +60,8 @@ class ParserTest < Minitest::Test
   def test_invalid_encoded_content
     parser = RagelQueryParser::Parser.new
 
-    assert_raises(ArgumentError) { parser.parse("%a") }
-    assert_raises(ArgumentError) { parser.parse("x%a_") }
+    assert_raises(ArgumentError) { parser.parse_query("%a") }
+    assert_raises(ArgumentError) { parser.parse_query("x%a_") }
   end
 
   private

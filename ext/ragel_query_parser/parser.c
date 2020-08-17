@@ -13,7 +13,7 @@ static VALUE rb_mEncoding;
 static VALUE utf_8;
 
 
-#line 63 "ext/ragel_query_parser/parser.rl"
+#line 62 "ext/ragel_query_parser/parser.rl"
 
 
 
@@ -25,7 +25,7 @@ static const int parser_error = -1;
 static const int parser_en_main = 0;
 
 
-#line 66 "ext/ragel_query_parser/parser.rl"
+#line 65 "ext/ragel_query_parser/parser.rl"
 
 /*
     parser = RagelQueryParser.new
@@ -61,7 +61,7 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
 	switch ( cs )
 	{
 tr79:
-#line 38 "ext/ragel_query_parser/parser.rl"
+#line 37 "ext/ragel_query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -71,7 +71,7 @@ tr79:
     }
 	goto st0;
 tr82:
-#line 46 "ext/ragel_query_parser/parser.rl"
+#line 45 "ext/ragel_query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -437,7 +437,6 @@ tr40:
 #line 29 "ext/ragel_query_parser/parser.rl"
 	{
         current_key = rb_enc_str_new(buffer, p - buffer, encoding);
-        rb_p(current_key);
 
         if (encoded) current_key = rb_funcall(unescaper, rb_intern("call"), 1, current_key);
 
@@ -452,7 +451,6 @@ tr76:
 #line 29 "ext/ragel_query_parser/parser.rl"
 	{
         current_key = rb_enc_str_new(buffer, p - buffer, encoding);
-        rb_p(current_key);
 
         if (encoded) current_key = rb_funcall(unescaper, rb_intern("call"), 1, current_key);
 
@@ -463,7 +461,7 @@ st23:
 	if ( ++p == pe )
 		goto _test_eof23;
 case 23:
-#line 467 "ext/ragel_query_parser/parser.c"
+#line 465 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr43;
 		case 37: goto tr44;
@@ -527,7 +525,7 @@ st24:
 	if ( ++p == pe )
 		goto _test_eof24;
 case 24:
-#line 531 "ext/ragel_query_parser/parser.c"
+#line 529 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st24;
 		case 37: goto tr47;
@@ -577,7 +575,7 @@ st25:
 	if ( ++p == pe )
 		goto _test_eof25;
 case 25:
-#line 581 "ext/ragel_query_parser/parser.c"
+#line 579 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -629,7 +627,7 @@ st28:
 	if ( ++p == pe )
 		goto _test_eof28;
 case 28:
-#line 633 "ext/ragel_query_parser/parser.c"
+#line 631 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr51;
 		case 37: goto tr53;
@@ -649,7 +647,7 @@ case 28:
 		goto tr51;
 	goto tr30;
 tr48:
-#line 38 "ext/ragel_query_parser/parser.rl"
+#line 37 "ext/ragel_query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -663,7 +661,7 @@ tr54:
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 38 "ext/ragel_query_parser/parser.rl"
+#line 37 "ext/ragel_query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -673,7 +671,7 @@ tr54:
     }
 	goto st29;
 tr66:
-#line 46 "ext/ragel_query_parser/parser.rl"
+#line 45 "ext/ragel_query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -687,7 +685,7 @@ tr72:
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 46 "ext/ragel_query_parser/parser.rl"
+#line 45 "ext/ragel_query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -700,7 +698,7 @@ st29:
 	if ( ++p == pe )
 		goto _test_eof29;
 case 29:
-#line 704 "ext/ragel_query_parser/parser.c"
+#line 702 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr56;
 		case 37: goto tr57;
@@ -724,7 +722,6 @@ tr41:
 #line 29 "ext/ragel_query_parser/parser.rl"
 	{
         current_key = rb_enc_str_new(buffer, p - buffer, encoding);
-        rb_p(current_key);
 
         if (encoded) current_key = rb_funcall(unescaper, rb_intern("call"), 1, current_key);
 
@@ -739,7 +736,6 @@ tr77:
 #line 29 "ext/ragel_query_parser/parser.rl"
 	{
         current_key = rb_enc_str_new(buffer, p - buffer, encoding);
-        rb_p(current_key);
 
         if (encoded) current_key = rb_funcall(unescaper, rb_intern("call"), 1, current_key);
 
@@ -750,7 +746,7 @@ st30:
 	if ( ++p == pe )
 		goto _test_eof30;
 case 30:
-#line 754 "ext/ragel_query_parser/parser.c"
+#line 750 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 37: goto st17;
 		case 93: goto st31;
@@ -832,7 +828,7 @@ st33:
 	if ( ++p == pe )
 		goto _test_eof33;
 case 33:
-#line 836 "ext/ragel_query_parser/parser.c"
+#line 832 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st33;
 		case 37: goto tr65;
@@ -882,7 +878,7 @@ st34:
 	if ( ++p == pe )
 		goto _test_eof34;
 case 34:
-#line 886 "ext/ragel_query_parser/parser.c"
+#line 882 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -934,7 +930,7 @@ st37:
 	if ( ++p == pe )
 		goto _test_eof37;
 case 37:
-#line 938 "ext/ragel_query_parser/parser.c"
+#line 934 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr69;
 		case 37: goto tr71;
@@ -963,7 +959,7 @@ st38:
 	if ( ++p == pe )
 		goto _test_eof38;
 case 38:
-#line 967 "ext/ragel_query_parser/parser.c"
+#line 963 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr35;
 		case 37: goto tr74;
@@ -989,7 +985,6 @@ tr10:
 #line 29 "ext/ragel_query_parser/parser.rl"
 	{
         current_key = rb_enc_str_new(buffer, p - buffer, encoding);
-        rb_p(current_key);
 
         if (encoded) current_key = rb_funcall(unescaper, rb_intern("call"), 1, current_key);
 
@@ -1000,7 +995,7 @@ st6:
 	if ( ++p == pe )
 		goto _test_eof6;
 case 6:
-#line 1004 "ext/ragel_query_parser/parser.c"
+#line 999 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr14;
 		case 37: goto tr15;
@@ -1048,7 +1043,7 @@ st39:
 	if ( ++p == pe )
 		goto _test_eof39;
 case 39:
-#line 1052 "ext/ragel_query_parser/parser.c"
+#line 1047 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st39;
 		case 37: goto tr78;
@@ -1088,7 +1083,7 @@ st7:
 	if ( ++p == pe )
 		goto _test_eof7;
 case 7:
-#line 1092 "ext/ragel_query_parser/parser.c"
+#line 1087 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -1119,7 +1114,6 @@ tr11:
 #line 29 "ext/ragel_query_parser/parser.rl"
 	{
         current_key = rb_enc_str_new(buffer, p - buffer, encoding);
-        rb_p(current_key);
 
         if (encoded) current_key = rb_funcall(unescaper, rb_intern("call"), 1, current_key);
 
@@ -1130,7 +1124,7 @@ st9:
 	if ( ++p == pe )
 		goto _test_eof9;
 case 9:
-#line 1134 "ext/ragel_query_parser/parser.c"
+#line 1128 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 37: goto st2;
 		case 93: goto st10;
@@ -1196,7 +1190,7 @@ st40:
 	if ( ++p == pe )
 		goto _test_eof40;
 case 40:
-#line 1200 "ext/ragel_query_parser/parser.c"
+#line 1194 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st40;
 		case 37: goto tr81;
@@ -1236,7 +1230,7 @@ st12:
 	if ( ++p == pe )
 		goto _test_eof12;
 case 12:
-#line 1240 "ext/ragel_query_parser/parser.c"
+#line 1234 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -1324,7 +1318,7 @@ case 13:
 	break;
 	case 24: 
 	case 39: 
-#line 38 "ext/ragel_query_parser/parser.rl"
+#line 37 "ext/ragel_query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -1335,7 +1329,7 @@ case 13:
 	break;
 	case 33: 
 	case 40: 
-#line 46 "ext/ragel_query_parser/parser.rl"
+#line 45 "ext/ragel_query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -1349,7 +1343,7 @@ case 13:
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 38 "ext/ragel_query_parser/parser.rl"
+#line 37 "ext/ragel_query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -1363,7 +1357,7 @@ case 13:
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 46 "ext/ragel_query_parser/parser.rl"
+#line 45 "ext/ragel_query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -1372,13 +1366,13 @@ case 13:
         rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, rb_str_split(current_value, ","));
     }
 	break;
-#line 1376 "ext/ragel_query_parser/parser.c"
+#line 1370 "ext/ragel_query_parser/parser.c"
 	}
 	}
 
 	}
 
-#line 91 "ext/ragel_query_parser/parser.rl"
+#line 90 "ext/ragel_query_parser/parser.rl"
 
 
     return rb_iv_get(self, "@parameters");
@@ -1429,7 +1423,7 @@ void Init_parser(VALUE rb_mRagelQueryParser) {
     rb_funcall(rb_cParser, rb_intern("attr_reader"), 1, rb_obj_freeze(rb_str_new_cstr("parameters")));
 
     rb_define_method(rb_cParser, "initialize", parser_initialize, 0);
-    rb_define_method(rb_cParser, "parse", parse, -1);
+    rb_define_method(rb_cParser, "parse_query", parse, -1);
 
     rb_define_singleton_method(rb_cParser, "unescape", unescape, 1);
 }

@@ -137,7 +137,7 @@ void Init_parser(VALUE rb_mRagelQueryParser) {
     rb_funcall(rb_cParser, rb_intern("attr_reader"), 1, rb_obj_freeze(rb_str_new_cstr("parameters")));
 
     rb_define_method(rb_cParser, "initialize", parser_initialize, 0);
-    rb_define_method(rb_cParser, "parse", parse, -1);
+    rb_define_method(rb_cParser, "parse_query", parse, -1);
 
     rb_define_singleton_method(rb_cParser, "unescape", unescape, 1);
 }
