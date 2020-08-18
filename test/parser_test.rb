@@ -45,6 +45,13 @@ class ParserTest < Minitest::Test
     assert_equal "VALUE 2", parser.parameters[:param_2]
   end
 
+  def test_combined_scenarios
+    parser = RagelQueryParser::Parser.new
+    expected = { country: "BR", language: "PT", tags: %w[webdev ruby rails] }
+
+    assert_equal expected, parser.parse_query("country=BR&language=PT&tags[]=webdev,ruby,rails")
+  end
+
   def test_unescape_ruby_spec
     assert_equal(
       "  !\"\#$%&'()*+,-./09:;<=>?@AZ[\\]^_`az{|}~",
