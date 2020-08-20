@@ -3,53 +3,51 @@
 require "test_helper"
 
 class ParserTest < Minitest::Test
+  def setup
+    @parser = RagelQueryParser::Parser.new
+  end
+
   def test_initialize
     assert_kind_of RagelQueryParser::Parser, RagelQueryParser::Parser.new
   end
 
   def test_single_param_parse
-    parser = RagelQueryParser::Parser.new
-    parser.parse_query("param_1=value_1")
-
-    assert_equal "value_1", parser.parameters[:param_1]
+    assert_equal({ param_1: "value_1" }, @parser.parse_query("param_1=value_1"))
   end
 
   def test_two_param_parse
-    parser = RagelQueryParser::Parser.new
-    parser.parse_query("param_1=value_1&param_2=value%202")
-
-    assert_equal "value_1", parser.parameters[:param_1]
-    assert_equal "value 2", parser.parameters[:param_2]
+    assert_equal(
+      { param_1: "value_1", param_2: "value 2" },
+      @parser.parse_query("param_1=value_1&param_2=value%202")
+    )
   end
 
   def test_semicolon_separator
-    parser = RagelQueryParser::Parser.new
-    parser.parse_query("param_1=value_1;param_2=value%202")
-
-    assert_equal "value_1", parser.parameters[:param_1]
-    assert_equal "value 2", parser.parameters[:param_2]
+    assert_equal(
+      { param_1: "value_1", param_2: "value 2" },
+      @parser.parse_query("param_1=value_1;param_2=value%202")
+    )
   end
 
   def test_array_parameters
-    parser = RagelQueryParser::Parser.new
-    expected = { countries: %w[BR US ES], languages: %w[PT EN ES] }
-
-    assert_equal expected, parser.parse_query("countries[]=BR,US,ES&languages[]=PT,EN,ES")
+    assert_equal(
+      { countries: %w[BR US ES], languages: %w[PT EN ES] },
+      @parser.parse_query("countries[]=BR,US,ES&languages[]=PT,EN,ES")
+    )
   end
 
   def test_custom_unescaper
-    parser = RagelQueryParser::Parser.new
-    parser.parse_query("param_1=value_1&param_2=value%202") { |s| s.upcase.gsub("%20", " ") }
-
-    assert_equal "value_1", parser.parameters[:param_1]
-    assert_equal "VALUE 2", parser.parameters[:param_2]
+    assert_equal(
+      { param_1: "value_1", param_2: "VALUE 2" },
+      @parser.parse_query("param_1=value_1&param_2=value%202") { |s| s.upcase.gsub("%20", " ") }
+    )
   end
 
   def test_combined_scenarios
-    parser = RagelQueryParser::Parser.new
-    expected = { country: "BR", language: "PT", tags: %w[webdev ruby rails] }
-
-    assert_equal expected, parser.parse_query("country=BR&language=PT&tags[]=webdev,ruby,rails")
+    assert_equal(
+      { country: "BR", language: "PT", tags: %w[webdev ruby rails] },
+      @parser.parse_query("country=BR&language=PT&tags[]=webdev,ruby,rails")
+    )
   end
 
   def test_unescape_ruby_spec
@@ -65,10 +63,8 @@ class ParserTest < Minitest::Test
   end
 
   def test_invalid_encoded_content
-    parser = RagelQueryParser::Parser.new
-
-    assert_raises(ArgumentError) { parser.parse_query("%a") }
-    assert_raises(ArgumentError) { parser.parse_query("x%a_") }
+    assert_raises(ArgumentError) { @parser.parse_query("%a") }
+    assert_raises(ArgumentError) { @parser.parse_query("x%a_") }
   end
 
   private

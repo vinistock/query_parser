@@ -42,7 +42,7 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
     const char *eof = pe;
     const char *buffer;
     int cs = 0, encoded = 0;
-    VALUE current_key = Qnil, current_value = Qnil;
+    VALUE current_key = Qnil, current_value = Qnil, parameters = rb_hash_new();
 
     if (NIL_P(unescaper)) {
         unescaper = rb_funcall(rb_obj_class(self), rb_intern("method"), 1, rb_obj_freeze(rb_str_new_cstr("unescape")));
@@ -67,7 +67,7 @@ tr79:
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, current_value);
+        rb_hash_aset(parameters, current_key, current_value);
     }
 	goto st0;
 tr82:
@@ -77,7 +77,7 @@ tr82:
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, rb_str_split(current_value, ","));
+        rb_hash_aset(parameters, current_key, rb_str_split(current_value, ","));
     }
 	goto st0;
 st0:
@@ -653,7 +653,7 @@ tr48:
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, current_value);
+        rb_hash_aset(parameters, current_key, current_value);
     }
 	goto st29;
 tr54:
@@ -667,7 +667,7 @@ tr54:
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, current_value);
+        rb_hash_aset(parameters, current_key, current_value);
     }
 	goto st29;
 tr66:
@@ -677,7 +677,7 @@ tr66:
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, rb_str_split(current_value, ","));
+        rb_hash_aset(parameters, current_key, rb_str_split(current_value, ","));
     }
 	goto st29;
 tr72:
@@ -691,7 +691,7 @@ tr72:
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, rb_str_split(current_value, ","));
+        rb_hash_aset(parameters, current_key, rb_str_split(current_value, ","));
     }
 	goto st29;
 st29:
@@ -1324,7 +1324,7 @@ case 13:
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, current_value);
+        rb_hash_aset(parameters, current_key, current_value);
     }
 	break;
 	case 33: 
@@ -1335,7 +1335,7 @@ case 13:
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, rb_str_split(current_value, ","));
+        rb_hash_aset(parameters, current_key, rb_str_split(current_value, ","));
     }
 	break;
 	case 28: 
@@ -1349,7 +1349,7 @@ case 13:
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, current_value);
+        rb_hash_aset(parameters, current_key, current_value);
     }
 	break;
 	case 37: 
@@ -1363,7 +1363,7 @@ case 13:
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        rb_hash_aset(rb_iv_get(self, "@parameters"), current_key, rb_str_split(current_value, ","));
+        rb_hash_aset(parameters, current_key, rb_str_split(current_value, ","));
     }
 	break;
 #line 1370 "ext/ragel_query_parser/parser.c"
@@ -1375,11 +1375,10 @@ case 13:
 #line 90 "ext/ragel_query_parser/parser.rl"
 
 
-    return rb_iv_get(self, "@parameters");
+    return parameters;
 }
 
 static VALUE parser_initialize(VALUE self) {
-    rb_iv_set(self, "@parameters", rb_hash_new());
     return self;
 }
 
@@ -1418,9 +1417,6 @@ void Init_parser(VALUE rb_mRagelQueryParser) {
 
     rb_mEncoding = rb_const_get(rb_cObject, rb_intern("Encoding"));
     utf_8 = rb_const_get(rb_mEncoding, rb_intern("UTF_8"));
-
-    // TODO: better way of defining attr_reader from C?
-    rb_funcall(rb_cParser, rb_intern("attr_reader"), 1, rb_obj_freeze(rb_str_new_cstr("parameters")));
 
     rb_define_method(rb_cParser, "initialize", parser_initialize, 0);
     rb_define_method(rb_cParser, "parse_query", parse, -1);
