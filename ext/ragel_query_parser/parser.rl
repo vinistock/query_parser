@@ -65,6 +65,13 @@ static VALUE rb_cParams;
 
 %% write data;
 
+static VALUE make_params(VALUE self) {
+    return rb_funcall(rb_iv_get(self, "@params_class"),
+                      rb_intern("new"),
+                      1,
+                      rb_iv_get(self, "@key_space_limit"));
+}
+
 static VALUE parse(int argc, VALUE* argv, VALUE self) {
     VALUE query_string, separator, unescaper;
     rb_scan_args(argc, argv, "11&", &query_string, &separator, &unescaper);
@@ -79,7 +86,7 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
     const char *buffer;
     int cs = 0, encoded = 0;
     VALUE current_key = Qnil, current_value = Qnil;
-    VALUE parameters = rb_funcall(rb_iv_get(self, "@params_class"), rb_intern("new"), 1, rb_iv_get(self, "@key_space_limit"));
+    VALUE parameters = make_params(self);
 
     if (NIL_P(unescaper)) {
         unescaper = rb_funcall(rb_obj_class(self), rb_intern("method"), 1, ID2SYM(rb_intern("unescape")));
@@ -165,6 +172,7 @@ void Init_parser(VALUE rb_mRagelQueryParser) {
     rb_define_method(rb_cParser, "parse_query", parse, -1);
     rb_define_method(rb_cParser, "new_space_limit", new_space_limit, 1);
     rb_define_method(rb_cParser, "new_depth_limit", new_depth_limit, 1);
+    rb_define_method(rb_cParser, "make_params", make_params, 0);
 
     rb_define_singleton_method(rb_cParser, "unescape", unescape, 1);
     rb_define_singleton_method(rb_cParser, "make_default", make_default, 2);

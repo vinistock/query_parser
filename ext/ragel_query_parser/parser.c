@@ -29,6 +29,13 @@ static const int parser_en_main = 0;
 
 #line 67 "ext/ragel_query_parser/parser.rl"
 
+static VALUE make_params(VALUE self) {
+    return rb_funcall(rb_iv_get(self, "@params_class"),
+                      rb_intern("new"),
+                      1,
+                      rb_iv_get(self, "@key_space_limit"));
+}
+
 static VALUE parse(int argc, VALUE* argv, VALUE self) {
     VALUE query_string, separator, unescaper;
     rb_scan_args(argc, argv, "11&", &query_string, &separator, &unescaper);
@@ -43,19 +50,19 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
     const char *buffer;
     int cs = 0, encoded = 0;
     VALUE current_key = Qnil, current_value = Qnil;
-    VALUE parameters = rb_funcall(rb_iv_get(self, "@params_class"), rb_intern("new"), 1, rb_iv_get(self, "@key_space_limit"));
+    VALUE parameters = make_params(self);
 
     if (NIL_P(unescaper)) {
         unescaper = rb_funcall(rb_obj_class(self), rb_intern("method"), 1, ID2SYM(rb_intern("unescape")));
     }
 
     
-#line 54 "ext/ragel_query_parser/parser.c"
+#line 61 "ext/ragel_query_parser/parser.c"
 	{
 	cs = parser_start;
 	}
 
-#line 59 "ext/ragel_query_parser/parser.c"
+#line 66 "ext/ragel_query_parser/parser.c"
 	{
 	if ( p == pe )
 		goto _test_eof;
@@ -85,7 +92,7 @@ st0:
 	if ( ++p == pe )
 		goto _test_eof0;
 case 0:
-#line 89 "ext/ragel_query_parser/parser.c"
+#line 96 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr1;
 		case 37: goto tr2;
@@ -131,7 +138,7 @@ st14:
 	if ( ++p == pe )
 		goto _test_eof14;
 case 14:
-#line 135 "ext/ragel_query_parser/parser.c"
+#line 142 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto tr29;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -147,7 +154,7 @@ st15:
 	if ( ++p == pe )
 		goto _test_eof15;
 case 15:
-#line 151 "ext/ragel_query_parser/parser.c"
+#line 158 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto tr31;
 	goto tr30;
@@ -161,7 +168,7 @@ st16:
 	if ( ++p == pe )
 		goto _test_eof16;
 case 16:
-#line 165 "ext/ragel_query_parser/parser.c"
+#line 172 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st17;
 	goto st16;
@@ -175,7 +182,7 @@ st17:
 	if ( ++p == pe )
 		goto _test_eof17;
 case 17:
-#line 179 "ext/ragel_query_parser/parser.c"
+#line 186 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -191,7 +198,7 @@ st18:
 	if ( ++p == pe )
 		goto _test_eof18;
 case 18:
-#line 195 "ext/ragel_query_parser/parser.c"
+#line 202 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto tr29;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -225,7 +232,7 @@ st3:
 	if ( ++p == pe )
 		goto _test_eof3;
 case 3:
-#line 229 "ext/ragel_query_parser/parser.c"
+#line 236 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st3;
 		case 37: goto tr8;
@@ -268,7 +275,7 @@ st4:
 	if ( ++p == pe )
 		goto _test_eof4;
 case 4:
-#line 272 "ext/ragel_query_parser/parser.c"
+#line 279 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -354,7 +361,7 @@ st20:
 	if ( ++p == pe )
 		goto _test_eof20;
 case 20:
-#line 358 "ext/ragel_query_parser/parser.c"
+#line 365 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st20;
 		case 37: goto tr38;
@@ -407,7 +414,7 @@ st21:
 	if ( ++p == pe )
 		goto _test_eof21;
 case 21:
-#line 411 "ext/ragel_query_parser/parser.c"
+#line 418 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -462,7 +469,7 @@ st23:
 	if ( ++p == pe )
 		goto _test_eof23;
 case 23:
-#line 466 "ext/ragel_query_parser/parser.c"
+#line 473 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr43;
 		case 37: goto tr44;
@@ -526,7 +533,7 @@ st24:
 	if ( ++p == pe )
 		goto _test_eof24;
 case 24:
-#line 530 "ext/ragel_query_parser/parser.c"
+#line 537 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st24;
 		case 37: goto tr47;
@@ -576,7 +583,7 @@ st25:
 	if ( ++p == pe )
 		goto _test_eof25;
 case 25:
-#line 580 "ext/ragel_query_parser/parser.c"
+#line 587 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -628,7 +635,7 @@ st28:
 	if ( ++p == pe )
 		goto _test_eof28;
 case 28:
-#line 632 "ext/ragel_query_parser/parser.c"
+#line 639 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr51;
 		case 37: goto tr53;
@@ -699,7 +706,7 @@ st29:
 	if ( ++p == pe )
 		goto _test_eof29;
 case 29:
-#line 703 "ext/ragel_query_parser/parser.c"
+#line 710 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr56;
 		case 37: goto tr57;
@@ -747,7 +754,7 @@ st30:
 	if ( ++p == pe )
 		goto _test_eof30;
 case 30:
-#line 751 "ext/ragel_query_parser/parser.c"
+#line 758 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 37: goto st17;
 		case 93: goto st31;
@@ -829,7 +836,7 @@ st33:
 	if ( ++p == pe )
 		goto _test_eof33;
 case 33:
-#line 833 "ext/ragel_query_parser/parser.c"
+#line 840 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st33;
 		case 37: goto tr65;
@@ -879,7 +886,7 @@ st34:
 	if ( ++p == pe )
 		goto _test_eof34;
 case 34:
-#line 883 "ext/ragel_query_parser/parser.c"
+#line 890 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -931,7 +938,7 @@ st37:
 	if ( ++p == pe )
 		goto _test_eof37;
 case 37:
-#line 935 "ext/ragel_query_parser/parser.c"
+#line 942 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr69;
 		case 37: goto tr71;
@@ -960,7 +967,7 @@ st38:
 	if ( ++p == pe )
 		goto _test_eof38;
 case 38:
-#line 964 "ext/ragel_query_parser/parser.c"
+#line 971 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr35;
 		case 37: goto tr74;
@@ -996,7 +1003,7 @@ st6:
 	if ( ++p == pe )
 		goto _test_eof6;
 case 6:
-#line 1000 "ext/ragel_query_parser/parser.c"
+#line 1007 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr14;
 		case 37: goto tr15;
@@ -1044,7 +1051,7 @@ st39:
 	if ( ++p == pe )
 		goto _test_eof39;
 case 39:
-#line 1048 "ext/ragel_query_parser/parser.c"
+#line 1055 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st39;
 		case 37: goto tr78;
@@ -1084,7 +1091,7 @@ st7:
 	if ( ++p == pe )
 		goto _test_eof7;
 case 7:
-#line 1088 "ext/ragel_query_parser/parser.c"
+#line 1095 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -1125,7 +1132,7 @@ st9:
 	if ( ++p == pe )
 		goto _test_eof9;
 case 9:
-#line 1129 "ext/ragel_query_parser/parser.c"
+#line 1136 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 37: goto st2;
 		case 93: goto st10;
@@ -1191,7 +1198,7 @@ st40:
 	if ( ++p == pe )
 		goto _test_eof40;
 case 40:
-#line 1195 "ext/ragel_query_parser/parser.c"
+#line 1202 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st40;
 		case 37: goto tr81;
@@ -1231,7 +1238,7 @@ st12:
 	if ( ++p == pe )
 		goto _test_eof12;
 case 12:
-#line 1235 "ext/ragel_query_parser/parser.c"
+#line 1242 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -1367,13 +1374,13 @@ case 13:
         params_set(parameters, current_key, rb_str_split(current_value, ","));
     }
 	break;
-#line 1371 "ext/ragel_query_parser/parser.c"
+#line 1378 "ext/ragel_query_parser/parser.c"
 	}
 	}
 
 	}
 
-#line 91 "ext/ragel_query_parser/parser.rl"
+#line 98 "ext/ragel_query_parser/parser.rl"
 
 
     return parameters;
@@ -1451,6 +1458,7 @@ void Init_parser(VALUE rb_mRagelQueryParser) {
     rb_define_method(rb_cParser, "parse_query", parse, -1);
     rb_define_method(rb_cParser, "new_space_limit", new_space_limit, 1);
     rb_define_method(rb_cParser, "new_depth_limit", new_depth_limit, 1);
+    rb_define_method(rb_cParser, "make_params", make_params, 0);
 
     rb_define_singleton_method(rb_cParser, "unescape", unescape, 1);
     rb_define_singleton_method(rb_cParser, "make_default", make_default, 2);

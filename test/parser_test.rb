@@ -37,6 +37,13 @@ class ParserTest < Minitest::Test
     assert_equal RagelQueryParser::Params, new_parser.instance_variable_get(:@params_class)
   end
 
+  def test_make_params
+    new_params = @parser.make_params
+
+    assert_kind_of RagelQueryParser::Params, new_params
+    assert_equal 65_536, new_params.instance_variable_get(:@limit)
+  end
+
   def test_single_param_parse
     assert_equal({ "param_1" => "value_1" }, @parser.parse_query("param_1=value_1").to_h)
   end
