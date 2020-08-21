@@ -1,13 +1,15 @@
-# RagelQueryParser
+# QueryParser
 
-WIP. A Ragel based query parser for Rack.
+A fast and robust query string parser compatible with Rack's default query parser built with [Ragel].
+
+Not yet ready for usage, but getting there.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "ragel_query_parser"
+gem "query_parser"
 ```
 
 And then execute:
@@ -16,18 +18,29 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install ragel_query_parser
+    $ gem install query_parser
 
 ## Usage
 
-TODO: Write usage instructions here
+For usage with frameworks based on Rack (such as Rails), simply override the default query parser.
+```ruby
+QueryParser.override_rack
+```
 
-## Development
+It can also be used on its own to parse query strings.
+```ruby
+parser = QueryParser::Parser.make_default(65_536, 32)
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+parser.parse_query("my_query=string&with_many=cool_params")
+=> #<QueryParser::Params:0x00007fb3cf0e80f0 @limit=65536, @size=17, @params={"my_query"=>"string", "with_many"=>"cool_params"}>
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+## Benchmarks
+
+Coming soon.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/ragel_query_parser.
+After checking out the repo, run `bin/setup` to install dependencies. If you don't have [Ragel] installed, you can use the available Brewfile to install it or refer to the tool's homepage for instructions.
+
+[Ragel]: https://github.com/adrian-thurston/ragel

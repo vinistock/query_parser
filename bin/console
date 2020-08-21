@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
-require "ragel_query_parser"
+require "query_parser"
 
 require "irb"
 IRB.start(__FILE__)

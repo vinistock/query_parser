@@ -2,8 +2,8 @@
 
 require "test_helper"
 
-class RagelQueryParserTest < Minitest::Test
+class QueryParserTest < Minitest::Test
   def test_that_it_has_a_version_number
-    refute_nil ::RagelQueryParser::VERSION
+    refute_nil ::QueryParser::VERSION
   end
 end

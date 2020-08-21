@@ -4,21 +4,21 @@ require "test_helper"
 
 class ParserTest < Minitest::Test
   def setup
-    @parser = RagelQueryParser::Parser.new(RagelQueryParser::Params, 65_536, 32)
+    @parser = QueryParser::Parser.new(QueryParser::Params, 65_536, 32)
   end
 
   def test_initialize
-    assert_kind_of RagelQueryParser::Parser, @parser
+    assert_kind_of QueryParser::Parser, @parser
     assert_equal 65_536, @parser.key_space_limit
     assert_equal 32, @parser.param_depth_limit
   end
 
   def test_make_default
-    parser = RagelQueryParser::Parser.make_default(65_536, 32)
+    parser = QueryParser::Parser.make_default(65_536, 32)
 
     assert_equal 65_536, parser.key_space_limit
     assert_equal 32, parser.param_depth_limit
-    assert_equal RagelQueryParser::Params, parser.instance_variable_get(:@params_class)
+    assert_equal QueryParser::Params, parser.instance_variable_get(:@params_class)
   end
 
   def test_new_space_limit
@@ -26,7 +26,7 @@ class ParserTest < Minitest::Test
 
     assert_equal 256, new_parser.key_space_limit
     assert_equal 32, new_parser.param_depth_limit
-    assert_equal RagelQueryParser::Params, new_parser.instance_variable_get(:@params_class)
+    assert_equal QueryParser::Params, new_parser.instance_variable_get(:@params_class)
   end
 
   def test_new_depth_limit
@@ -34,13 +34,13 @@ class ParserTest < Minitest::Test
 
     assert_equal 65_536, new_parser.key_space_limit
     assert_equal 16, new_parser.param_depth_limit
-    assert_equal RagelQueryParser::Params, new_parser.instance_variable_get(:@params_class)
+    assert_equal QueryParser::Params, new_parser.instance_variable_get(:@params_class)
   end
 
   def test_make_params
     new_params = @parser.make_params
 
-    assert_kind_of RagelQueryParser::Params, new_params
+    assert_kind_of QueryParser::Params, new_params
     assert_equal 65_536, new_params.instance_variable_get(:@limit)
   end
 
@@ -107,6 +107,6 @@ class ParserTest < Minitest::Test
   private
 
   def unescape(string)
-    RagelQueryParser::Parser.unescape(string)
+    QueryParser::Parser.unescape(string)
   end
 end

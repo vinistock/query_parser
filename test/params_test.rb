@@ -4,7 +4,7 @@ require "test_helper"
 
 class ParamsTest < Minitest::Test
   def setup
-    @params = RagelQueryParser::Params.new(10)
+    @params = QueryParser::Params.new(10)
   end
 
   def test_accessors
@@ -29,8 +29,8 @@ class ParamsTest < Minitest::Test
   end
 
   def test_to_h
-    params = RagelQueryParser::Params.new(256)
-    inner_params = RagelQueryParser::Params.new(256)
+    params = QueryParser::Params.new(256)
+    inner_params = QueryParser::Params.new(256)
     inner_params["some_key"] = "some_value"
 
     params["key"] = "value"

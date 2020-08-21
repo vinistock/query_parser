@@ -15,7 +15,7 @@ end
 require "rack/query_parser"
 
 query_string = (0..1000).map { |i| i % 5 ? "param#{i}=value%20#{i}" : "param#{i}=value_#{i}" }.join("&")
-ragel_parser = RagelQueryParser::Parser.make_default(65_536, 32)
+ragel_parser = QueryParser::Parser.make_default(65_536, 32)
 rack_parser = Rack::QueryParser.make_default(65_536, 32)
 
 Benchmark.ips do |x|

@@ -159,10 +159,10 @@ static VALUE new_depth_limit(VALUE self, VALUE param_depth_limit) {
                       param_depth_limit);
 }
 
-void Init_parser(VALUE rb_mRagelQueryParser) {
-    VALUE rb_cParser = rb_define_class_under(rb_mRagelQueryParser, "Parser", rb_cObject);
+void Init_parser(VALUE rb_mQueryParser) {
+    VALUE rb_cParser = rb_define_class_under(rb_mQueryParser, "Parser", rb_cObject);
 
-    rb_cParams = rb_const_get(rb_mRagelQueryParser, rb_intern("Params"));
+    rb_cParams = rb_const_get(rb_mQueryParser, rb_intern("Params"));
     rb_mEncoding = rb_const_get(rb_cObject, rb_intern("Encoding"));
     utf_8 = rb_const_get(rb_mEncoding, rb_intern("UTF_8"));
 

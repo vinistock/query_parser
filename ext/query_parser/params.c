@@ -60,8 +60,8 @@ static VALUE params_to_hash(VALUE self) {
     return params;
 }
 
-void Init_params(VALUE rb_mRagelQueryParser) {
-    rb_cParams = rb_define_class_under(rb_mRagelQueryParser, "Params", rb_cObject);
+void Init_params(VALUE rb_mQueryParser) {
+    rb_cParams = rb_define_class_under(rb_mQueryParser, "Params", rb_cObject);
 
     rb_define_method(rb_cParams, "initialize", params_initialize, 1);
     rb_define_method(rb_cParams, "[]", params_access, 1);
