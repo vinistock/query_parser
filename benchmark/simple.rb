@@ -9,7 +9,7 @@ gemfile(true) do
   gem "benchmark-ips"
   gem "benchmark-memory", require: "benchmark/memory"
   gem "rack", github: "rack/rack"
-  gem "ragel_query_parser", path: "../ragel_query_parser"
+  gem "query_parser", path: "../query_parser"
 end
 
 require "rack/query_parser"

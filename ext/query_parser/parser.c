@@ -15,7 +15,7 @@ static VALUE utf_8;
 static VALUE rb_cParams;
 
 
-#line 64 "ext/query_parser/parser.rl"
+#line 84 "ext/query_parser/parser.rl"
 
 
 
@@ -27,7 +27,7 @@ static const int parser_error = -1;
 static const int parser_en_main = 0;
 
 
-#line 67 "ext/query_parser/parser.rl"
+#line 87 "ext/query_parser/parser.rl"
 
 static VALUE make_params(VALUE self) {
     return rb_funcall(rb_iv_get(self, "@params_class"),
@@ -49,7 +49,7 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
     const char *eof = pe;
     const char *buffer;
     int cs = 0, encoded = 0;
-    VALUE current_key = Qnil, current_value = Qnil;
+    VALUE current_key = Qnil, current_value = Qnil, temp_value = Qnil;
     VALUE parameters = make_params(self);
 
     if (NIL_P(unescaper)) {
@@ -75,24 +75,44 @@ tr79:
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        params_set(parameters, current_key, current_value);
+        temp_value = params_access(parameters, current_key);
+
+        if (RTEST(temp_value)) {
+            if (RTEST(rb_obj_is_kind_of(temp_value, rb_cArray))) {
+                params_set(parameters, current_key, rb_ary_push(temp_value, current_value));
+            } else {
+                params_set(parameters, current_key, rb_ary_new_from_args(2, temp_value, current_value));
+            }
+        } else {
+            params_set(parameters, current_key, current_value);
+        }
     }
 	goto st0;
 tr82:
-#line 47 "ext/query_parser/parser.rl"
+#line 57 "ext/query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        params_set(parameters, current_key, rb_str_split(current_value, ","));
+        temp_value = params_access(parameters, current_key);
+
+        if (RTEST(temp_value)) {
+            if (RTEST(rb_obj_is_kind_of(temp_value, rb_cArray))) {
+                params_set(parameters, current_key, rb_funcall(temp_value, rb_intern("concat"), 1, rb_str_split(current_value, ",")));
+            } else {
+                params_set(parameters, current_key, rb_funcall(rb_ary_new_from_args(1, temp_value), rb_intern("concat"), 1, rb_str_split(current_value, ",")));
+            }
+        } else {
+            params_set(parameters, current_key, rb_str_split(current_value, ","));
+        }
     }
 	goto st0;
 st0:
 	if ( ++p == pe )
 		goto _test_eof0;
 case 0:
-#line 96 "ext/query_parser/parser.c"
+#line 116 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr1;
 		case 37: goto tr2;
@@ -138,7 +158,7 @@ st14:
 	if ( ++p == pe )
 		goto _test_eof14;
 case 14:
-#line 142 "ext/query_parser/parser.c"
+#line 162 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto tr29;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -154,7 +174,7 @@ st15:
 	if ( ++p == pe )
 		goto _test_eof15;
 case 15:
-#line 158 "ext/query_parser/parser.c"
+#line 178 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto tr31;
 	goto tr30;
@@ -168,7 +188,7 @@ st16:
 	if ( ++p == pe )
 		goto _test_eof16;
 case 16:
-#line 172 "ext/query_parser/parser.c"
+#line 192 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st17;
 	goto st16;
@@ -182,7 +202,7 @@ st17:
 	if ( ++p == pe )
 		goto _test_eof17;
 case 17:
-#line 186 "ext/query_parser/parser.c"
+#line 206 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -198,7 +218,7 @@ st18:
 	if ( ++p == pe )
 		goto _test_eof18;
 case 18:
-#line 202 "ext/query_parser/parser.c"
+#line 222 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto tr29;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -232,7 +252,7 @@ st3:
 	if ( ++p == pe )
 		goto _test_eof3;
 case 3:
-#line 236 "ext/query_parser/parser.c"
+#line 256 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st3;
 		case 37: goto tr8;
@@ -275,7 +295,7 @@ st4:
 	if ( ++p == pe )
 		goto _test_eof4;
 case 4:
-#line 279 "ext/query_parser/parser.c"
+#line 299 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -361,7 +381,7 @@ st20:
 	if ( ++p == pe )
 		goto _test_eof20;
 case 20:
-#line 365 "ext/query_parser/parser.c"
+#line 385 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st20;
 		case 37: goto tr38;
@@ -414,7 +434,7 @@ st21:
 	if ( ++p == pe )
 		goto _test_eof21;
 case 21:
-#line 418 "ext/query_parser/parser.c"
+#line 438 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -469,7 +489,7 @@ st23:
 	if ( ++p == pe )
 		goto _test_eof23;
 case 23:
-#line 473 "ext/query_parser/parser.c"
+#line 493 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr43;
 		case 37: goto tr44;
@@ -533,7 +553,7 @@ st24:
 	if ( ++p == pe )
 		goto _test_eof24;
 case 24:
-#line 537 "ext/query_parser/parser.c"
+#line 557 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st24;
 		case 37: goto tr47;
@@ -583,7 +603,7 @@ st25:
 	if ( ++p == pe )
 		goto _test_eof25;
 case 25:
-#line 587 "ext/query_parser/parser.c"
+#line 607 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -635,7 +655,7 @@ st28:
 	if ( ++p == pe )
 		goto _test_eof28;
 case 28:
-#line 639 "ext/query_parser/parser.c"
+#line 659 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr51;
 		case 37: goto tr53;
@@ -661,7 +681,17 @@ tr48:
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        params_set(parameters, current_key, current_value);
+        temp_value = params_access(parameters, current_key);
+
+        if (RTEST(temp_value)) {
+            if (RTEST(rb_obj_is_kind_of(temp_value, rb_cArray))) {
+                params_set(parameters, current_key, rb_ary_push(temp_value, current_value));
+            } else {
+                params_set(parameters, current_key, rb_ary_new_from_args(2, temp_value, current_value));
+            }
+        } else {
+            params_set(parameters, current_key, current_value);
+        }
     }
 	goto st29;
 tr54:
@@ -675,17 +705,37 @@ tr54:
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        params_set(parameters, current_key, current_value);
+        temp_value = params_access(parameters, current_key);
+
+        if (RTEST(temp_value)) {
+            if (RTEST(rb_obj_is_kind_of(temp_value, rb_cArray))) {
+                params_set(parameters, current_key, rb_ary_push(temp_value, current_value));
+            } else {
+                params_set(parameters, current_key, rb_ary_new_from_args(2, temp_value, current_value));
+            }
+        } else {
+            params_set(parameters, current_key, current_value);
+        }
     }
 	goto st29;
 tr66:
-#line 47 "ext/query_parser/parser.rl"
+#line 57 "ext/query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        params_set(parameters, current_key, rb_str_split(current_value, ","));
+        temp_value = params_access(parameters, current_key);
+
+        if (RTEST(temp_value)) {
+            if (RTEST(rb_obj_is_kind_of(temp_value, rb_cArray))) {
+                params_set(parameters, current_key, rb_funcall(temp_value, rb_intern("concat"), 1, rb_str_split(current_value, ",")));
+            } else {
+                params_set(parameters, current_key, rb_funcall(rb_ary_new_from_args(1, temp_value), rb_intern("concat"), 1, rb_str_split(current_value, ",")));
+            }
+        } else {
+            params_set(parameters, current_key, rb_str_split(current_value, ","));
+        }
     }
 	goto st29;
 tr72:
@@ -693,20 +743,30 @@ tr72:
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 47 "ext/query_parser/parser.rl"
+#line 57 "ext/query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        params_set(parameters, current_key, rb_str_split(current_value, ","));
+        temp_value = params_access(parameters, current_key);
+
+        if (RTEST(temp_value)) {
+            if (RTEST(rb_obj_is_kind_of(temp_value, rb_cArray))) {
+                params_set(parameters, current_key, rb_funcall(temp_value, rb_intern("concat"), 1, rb_str_split(current_value, ",")));
+            } else {
+                params_set(parameters, current_key, rb_funcall(rb_ary_new_from_args(1, temp_value), rb_intern("concat"), 1, rb_str_split(current_value, ",")));
+            }
+        } else {
+            params_set(parameters, current_key, rb_str_split(current_value, ","));
+        }
     }
 	goto st29;
 st29:
 	if ( ++p == pe )
 		goto _test_eof29;
 case 29:
-#line 710 "ext/query_parser/parser.c"
+#line 770 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr56;
 		case 37: goto tr57;
@@ -754,7 +814,7 @@ st30:
 	if ( ++p == pe )
 		goto _test_eof30;
 case 30:
-#line 758 "ext/query_parser/parser.c"
+#line 818 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 37: goto st17;
 		case 93: goto st31;
@@ -836,7 +896,7 @@ st33:
 	if ( ++p == pe )
 		goto _test_eof33;
 case 33:
-#line 840 "ext/query_parser/parser.c"
+#line 900 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st33;
 		case 37: goto tr65;
@@ -886,7 +946,7 @@ st34:
 	if ( ++p == pe )
 		goto _test_eof34;
 case 34:
-#line 890 "ext/query_parser/parser.c"
+#line 950 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -938,7 +998,7 @@ st37:
 	if ( ++p == pe )
 		goto _test_eof37;
 case 37:
-#line 942 "ext/query_parser/parser.c"
+#line 1002 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr69;
 		case 37: goto tr71;
@@ -967,7 +1027,7 @@ st38:
 	if ( ++p == pe )
 		goto _test_eof38;
 case 38:
-#line 971 "ext/query_parser/parser.c"
+#line 1031 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr35;
 		case 37: goto tr74;
@@ -1003,7 +1063,7 @@ st6:
 	if ( ++p == pe )
 		goto _test_eof6;
 case 6:
-#line 1007 "ext/query_parser/parser.c"
+#line 1067 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr14;
 		case 37: goto tr15;
@@ -1051,7 +1111,7 @@ st39:
 	if ( ++p == pe )
 		goto _test_eof39;
 case 39:
-#line 1055 "ext/query_parser/parser.c"
+#line 1115 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st39;
 		case 37: goto tr78;
@@ -1091,7 +1151,7 @@ st7:
 	if ( ++p == pe )
 		goto _test_eof7;
 case 7:
-#line 1095 "ext/query_parser/parser.c"
+#line 1155 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -1132,7 +1192,7 @@ st9:
 	if ( ++p == pe )
 		goto _test_eof9;
 case 9:
-#line 1136 "ext/query_parser/parser.c"
+#line 1196 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 37: goto st2;
 		case 93: goto st10;
@@ -1198,7 +1258,7 @@ st40:
 	if ( ++p == pe )
 		goto _test_eof40;
 case 40:
-#line 1202 "ext/query_parser/parser.c"
+#line 1262 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st40;
 		case 37: goto tr81;
@@ -1238,7 +1298,7 @@ st12:
 	if ( ++p == pe )
 		goto _test_eof12;
 case 12:
-#line 1242 "ext/query_parser/parser.c"
+#line 1302 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -1332,18 +1392,38 @@ case 13:
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        params_set(parameters, current_key, current_value);
+        temp_value = params_access(parameters, current_key);
+
+        if (RTEST(temp_value)) {
+            if (RTEST(rb_obj_is_kind_of(temp_value, rb_cArray))) {
+                params_set(parameters, current_key, rb_ary_push(temp_value, current_value));
+            } else {
+                params_set(parameters, current_key, rb_ary_new_from_args(2, temp_value, current_value));
+            }
+        } else {
+            params_set(parameters, current_key, current_value);
+        }
     }
 	break;
 	case 33: 
 	case 40: 
-#line 47 "ext/query_parser/parser.rl"
+#line 57 "ext/query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        params_set(parameters, current_key, rb_str_split(current_value, ","));
+        temp_value = params_access(parameters, current_key);
+
+        if (RTEST(temp_value)) {
+            if (RTEST(rb_obj_is_kind_of(temp_value, rb_cArray))) {
+                params_set(parameters, current_key, rb_funcall(temp_value, rb_intern("concat"), 1, rb_str_split(current_value, ",")));
+            } else {
+                params_set(parameters, current_key, rb_funcall(rb_ary_new_from_args(1, temp_value), rb_intern("concat"), 1, rb_str_split(current_value, ",")));
+            }
+        } else {
+            params_set(parameters, current_key, rb_str_split(current_value, ","));
+        }
     }
 	break;
 	case 28: 
@@ -1357,7 +1437,17 @@ case 13:
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        params_set(parameters, current_key, current_value);
+        temp_value = params_access(parameters, current_key);
+
+        if (RTEST(temp_value)) {
+            if (RTEST(rb_obj_is_kind_of(temp_value, rb_cArray))) {
+                params_set(parameters, current_key, rb_ary_push(temp_value, current_value));
+            } else {
+                params_set(parameters, current_key, rb_ary_new_from_args(2, temp_value, current_value));
+            }
+        } else {
+            params_set(parameters, current_key, current_value);
+        }
     }
 	break;
 	case 37: 
@@ -1365,25 +1455,35 @@ case 13:
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 47 "ext/query_parser/parser.rl"
+#line 57 "ext/query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        params_set(parameters, current_key, rb_str_split(current_value, ","));
+        temp_value = params_access(parameters, current_key);
+
+        if (RTEST(temp_value)) {
+            if (RTEST(rb_obj_is_kind_of(temp_value, rb_cArray))) {
+                params_set(parameters, current_key, rb_funcall(temp_value, rb_intern("concat"), 1, rb_str_split(current_value, ",")));
+            } else {
+                params_set(parameters, current_key, rb_funcall(rb_ary_new_from_args(1, temp_value), rb_intern("concat"), 1, rb_str_split(current_value, ",")));
+            }
+        } else {
+            params_set(parameters, current_key, rb_str_split(current_value, ","));
+        }
     }
 	break;
-#line 1378 "ext/query_parser/parser.c"
+#line 1478 "ext/query_parser/parser.c"
 	}
 	}
 
 	}
 
-#line 98 "ext/query_parser/parser.rl"
+#line 118 "ext/query_parser/parser.rl"
 
 
-    return parameters;
+    return params_to_hash(parameters);
 }
 
 static VALUE parser_initialize(VALUE self, VALUE params_class, VALUE key_space_limit, VALUE param_depth_limit) {

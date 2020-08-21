@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class ParserTest < Minitest::Test
+class ParserTest < Minitest::Test # rubocop:disable Metrics/ClassLength
   def setup
     @parser = QueryParser::Parser.new(QueryParser::Params, 65_536, 32)
   end
@@ -45,46 +45,65 @@ class ParserTest < Minitest::Test
   end
 
   def test_single_param_parse
-    assert_equal({ "param_1" => "value_1" }, @parser.parse_query("param_1=value_1").to_h)
+    assert_equal({ "param_1" => "value_1" }, @parser.parse_query("param_1=value_1"))
   end
 
   def test_two_param_parse
     assert_equal(
       { "param_1" => "value_1", "param_2" => "value 2" },
-      @parser.parse_query("param_1=value_1&param_2=value%202").to_h
+      @parser.parse_query("param_1=value_1&param_2=value%202")
     )
   end
 
   def test_semicolon_separator
     assert_equal(
       { "param_1" => "value_1", "param_2" => "value 2" },
-      @parser.parse_query("param_1=value_1;param_2=value%202").to_h
+      @parser.parse_query("param_1=value_1;param_2=value%202")
     )
   end
 
   def test_array_parameters
     assert_equal(
       { "countries" => %w[BR US ES], "languages" => %w[PT EN ES] },
-      @parser.parse_query("countries[]=BR,US,ES&languages[]=PT,EN,ES").to_h
+      @parser.parse_query("countries[]=BR,US,ES&languages[]=PT,EN,ES")
+    )
+  end
+
+  def test_repeated_values_are_concatenated
+    assert_equal(
+      { "countries" => %w[BR US] },
+      @parser.parse_query("countries=BR&countries=US")
+    )
+
+    assert_equal(
+      { "countries" => %w[BR US ES] },
+      @parser.parse_query("countries=BR&countries=US&countries=ES")
+    )
+  end
+
+  def test_array_concatenation
+    assert_equal(
+      { "countries" => %w[BR FR ES DE] },
+      @parser.parse_query("countries=BR&countries[]=FR,ES,DE")
     )
   end
 
   def test_custom_unescaper
     assert_equal(
       { "param_1" => "value_1", "param_2" => "VALUE 2" },
-      (@parser.parse_query("param_1=value_1&param_2=value%202") { |s| s.upcase.gsub("%20", " ") }).to_h
+      (@parser.parse_query("param_1=value_1&param_2=value%202") { |s| s.upcase.gsub("%20", " ") })
     )
   end
 
   def test_combined_scenarios
     assert_equal(
       { "country" => "BR", "language" => "PT", "tags" => %w[webdev ruby rails] },
-      @parser.parse_query("country=BR&language=PT&tags[]=webdev,ruby,rails").to_h
+      @parser.parse_query("country=BR&language=PT&tags[]=webdev,ruby,rails")
     )
   end
 
   def test_empty_query_string
-    assert_equal({}, @parser.parse_query(nil).to_h)
+    assert_equal({}, @parser.parse_query(nil))
   end
 
   def test_unescape_ruby_spec

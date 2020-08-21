@@ -41,7 +41,17 @@ static VALUE rb_cParams;
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        params_set(parameters, current_key, current_value);
+        temp_value = params_access(parameters, current_key);
+
+        if (RTEST(temp_value)) {
+            if (RTEST(rb_obj_is_kind_of(temp_value, rb_cArray))) {
+                params_set(parameters, current_key, rb_ary_push(temp_value, current_value));
+            } else {
+                params_set(parameters, current_key, rb_ary_new_from_args(2, temp_value, current_value));
+            }
+        } else {
+            params_set(parameters, current_key, current_value);
+        }
     }
 
     action array_parameter_value {
@@ -49,7 +59,17 @@ static VALUE rb_cParams;
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        params_set(parameters, current_key, rb_str_split(current_value, ","));
+        temp_value = params_access(parameters, current_key);
+
+        if (RTEST(temp_value)) {
+            if (RTEST(rb_obj_is_kind_of(temp_value, rb_cArray))) {
+                params_set(parameters, current_key, rb_funcall(temp_value, rb_intern("concat"), 1, rb_str_split(current_value, ",")));
+            } else {
+                params_set(parameters, current_key, rb_funcall(rb_ary_new_from_args(1, temp_value), rb_intern("concat"), 1, rb_str_split(current_value, ",")));
+            }
+        } else {
+            params_set(parameters, current_key, rb_str_split(current_value, ","));
+        }
     }
 
     parameter_separator = [&;];
@@ -85,7 +105,7 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
     const char *eof = pe;
     const char *buffer;
     int cs = 0, encoded = 0;
-    VALUE current_key = Qnil, current_value = Qnil;
+    VALUE current_key = Qnil, current_value = Qnil, temp_value = Qnil;
     VALUE parameters = make_params(self);
 
     if (NIL_P(unescaper)) {
@@ -97,7 +117,7 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
         write exec;
     }%%
 
-    return parameters;
+    return params_to_hash(parameters);
 }
 
 static VALUE parser_initialize(VALUE self, VALUE params_class, VALUE key_space_limit, VALUE param_depth_limit) {
