@@ -2,7 +2,6 @@
 
 require "bundler/gem_tasks"
 require "rake/testtask"
-require "english"
 
 Rake::TestTask.new(:test) do |t|
   t.libs << "test"
@@ -16,7 +15,7 @@ task :ragel do
   ext_path = "ext/query_parser"
   puts "Compiling Ragel..."
   system("ragel #{ext_path}/parser.rl -C -G2 -I ext/query_parser -o #{ext_path}/parser.c")
-  abort unless $CHILD_STATUS.success?
+  abort unless $?.success? # rubocop:disable Style/SpecialGlobalVars
 end
 
 task make: %i[clobber ragel compile]
