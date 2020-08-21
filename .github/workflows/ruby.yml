@@ -1,0 +1,29 @@
+name: Ruby on Rails
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      matrix:
+        ruby_version: [2.5, 2.6, 2.7]
+          os: [ubuntu, macos, windows]
+
+    steps:
+    - uses: actions/checkout@v2.3.2
+    - name: Cache
+      uses: actions/cache@v2.1.1
+      with:
+        path: vendor/bundle
+        key: ${{ matrix.ruby_version }}
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1.43.0
+      with:
+        ruby-version: ${{ matrix.ruby_version }}
+    - name: Compile, run test suite and run Rubocop
+      run: |
+        gem install bundler
+        bundle install --path vendor/bundle --jobs 4 --retry 3
+        bundle exec rake ci
+        bundle exec rubocop

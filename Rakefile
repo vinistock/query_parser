@@ -27,3 +27,4 @@ Rake::ExtensionTask.new("query_parser") do |ext|
 end
 
 task default: %i[clobber ragel compile test]
+task ci: %i[compile test]
