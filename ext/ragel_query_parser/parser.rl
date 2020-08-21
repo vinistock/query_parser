@@ -6,6 +6,7 @@
  */
 
 #include "parser.h"
+#include "params.h"
 
 static VALUE rb_mEncoding;
 static VALUE utf_8;
@@ -32,7 +33,7 @@ static VALUE rb_cParams;
 
         if (encoded) current_key = rb_funcall(unescaper, rb_intern("call"), 1, current_key);
 
-        current_key = rb_str_intern(rb_obj_freeze(current_key));
+        current_key = rb_obj_freeze(current_key);
     }
 
     action regular_parameter_value {
@@ -40,7 +41,7 @@ static VALUE rb_cParams;
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        rb_hash_aset(parameters, current_key, current_value);
+        params_set(parameters, current_key, current_value);
     }
 
     action array_parameter_value {
@@ -48,7 +49,7 @@ static VALUE rb_cParams;
 
         if (encoded) current_value = rb_funcall(unescaper, rb_intern("call"), 1, current_value);
 
-        rb_hash_aset(parameters, current_key, rb_str_split(current_value, ","));
+        params_set(parameters, current_key, rb_str_split(current_value, ","));
     }
 
     parameter_separator = [&;];
@@ -73,13 +74,16 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
     rb_scan_args(argc, argv, "11&", &query_string, &separator, &unescaper);
     // TODO: use separator
 
+    if (NIL_P(query_string)) query_string = rb_obj_freeze(rb_str_new_cstr(""));
+
     rb_encoding *encoding = rb_enc_get(query_string);
     const char *p = RSTRING_PTR(query_string);
     const char *pe = p + RSTRING_LEN(query_string);
     const char *eof = pe;
     const char *buffer;
     int cs = 0, encoded = 0;
-    VALUE current_key = Qnil, current_value = Qnil, parameters = rb_hash_new();
+    VALUE current_key = Qnil, current_value = Qnil;
+    VALUE parameters = rb_funcall(rb_iv_get(self, "@params_class"), rb_intern("new"), 1, rb_iv_get(self, "@key_space_limit"));
 
     if (NIL_P(unescaper)) {
         unescaper = rb_funcall(rb_obj_class(self), rb_intern("method"), 1, ID2SYM(rb_intern("unescape")));

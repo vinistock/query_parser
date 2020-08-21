@@ -17,15 +17,15 @@ static VALUE params_has_key(VALUE self, VALUE key) {
     return RTEST(rb_hash_aref(rb_iv_get(self, "@params"), key)) ? Qtrue : Qfalse;
 }
 
-static VALUE params_set(VALUE self, VALUE key, VALUE value) {
-    VALUE size = rb_iv_get(self, "@size");
+VALUE params_set(VALUE self, VALUE key, VALUE value) {
+    long size = NUM2LONG(rb_iv_get(self, "@size"));
 
     if (RTEST(key) && !RTEST(params_has_key(self, key))) {
-        size = LONG2NUM(NUM2LONG(size) + rb_str_strlen(key));
-        rb_iv_set(self, "@size", size);
+        size += rb_str_strlen(key);
+        rb_iv_set(self, "@size", LONG2NUM(size));
     }
 
-    if (NUM2LONG(size) > NUM2LONG(rb_iv_get(self, "@limit"))) {
+    if (size > NUM2LONG(rb_iv_get(self, "@limit"))) {
         rb_raise(rb_eRangeError, "exceeded available parameter key space");
     }
 

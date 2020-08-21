@@ -4,5 +4,6 @@
 #include <ruby.h>
 
 void Init_params(VALUE rb_mRagelQueryParser);
+VALUE params_set(VALUE self, VALUE key, VALUE value);
 
 #endif

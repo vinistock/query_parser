@@ -22,42 +22,46 @@ class ParserTest < Minitest::Test
   end
 
   def test_single_param_parse
-    assert_equal({ param_1: "value_1" }, @parser.parse_query("param_1=value_1"))
+    assert_equal({ "param_1" => "value_1" }, @parser.parse_query("param_1=value_1").to_h)
   end
 
   def test_two_param_parse
     assert_equal(
-      { param_1: "value_1", param_2: "value 2" },
-      @parser.parse_query("param_1=value_1&param_2=value%202")
+      { "param_1" => "value_1", "param_2" => "value 2" },
+      @parser.parse_query("param_1=value_1&param_2=value%202").to_h
     )
   end
 
   def test_semicolon_separator
     assert_equal(
-      { param_1: "value_1", param_2: "value 2" },
-      @parser.parse_query("param_1=value_1;param_2=value%202")
+      { "param_1" => "value_1", "param_2" => "value 2" },
+      @parser.parse_query("param_1=value_1;param_2=value%202").to_h
     )
   end
 
   def test_array_parameters
     assert_equal(
-      { countries: %w[BR US ES], languages: %w[PT EN ES] },
-      @parser.parse_query("countries[]=BR,US,ES&languages[]=PT,EN,ES")
+      { "countries" => %w[BR US ES], "languages" => %w[PT EN ES] },
+      @parser.parse_query("countries[]=BR,US,ES&languages[]=PT,EN,ES").to_h
     )
   end
 
   def test_custom_unescaper
     assert_equal(
-      { param_1: "value_1", param_2: "VALUE 2" },
-      @parser.parse_query("param_1=value_1&param_2=value%202") { |s| s.upcase.gsub("%20", " ") }
+      { "param_1" => "value_1", "param_2" => "VALUE 2" },
+      (@parser.parse_query("param_1=value_1&param_2=value%202") { |s| s.upcase.gsub("%20", " ") }).to_h
     )
   end
 
   def test_combined_scenarios
     assert_equal(
-      { country: "BR", language: "PT", tags: %w[webdev ruby rails] },
-      @parser.parse_query("country=BR&language=PT&tags[]=webdev,ruby,rails")
+      { "country" => "BR", "language" => "PT", "tags" => %w[webdev ruby rails] },
+      @parser.parse_query("country=BR&language=PT&tags[]=webdev,ruby,rails").to_h
     )
+  end
+
+  def test_empty_query_string
+    assert_equal({}, @parser.parse_query(nil).to_h)
   end
 
   def test_unescape_ruby_spec
