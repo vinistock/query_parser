@@ -21,6 +21,22 @@ class ParserTest < Minitest::Test
     assert_equal RagelQueryParser::Params, parser.instance_variable_get(:@params_class)
   end
 
+  def test_new_space_limit
+    new_parser = @parser.new_space_limit(256)
+
+    assert_equal 256, new_parser.key_space_limit
+    assert_equal 32, new_parser.param_depth_limit
+    assert_equal RagelQueryParser::Params, new_parser.instance_variable_get(:@params_class)
+  end
+
+  def test_new_depth_limit
+    new_parser = @parser.new_depth_limit(16)
+
+    assert_equal 65_536, new_parser.key_space_limit
+    assert_equal 16, new_parser.param_depth_limit
+    assert_equal RagelQueryParser::Params, new_parser.instance_variable_get(:@params_class)
+  end
+
   def test_single_param_parse
     assert_equal({ "param_1" => "value_1" }, @parser.parse_query("param_1=value_1").to_h)
   end

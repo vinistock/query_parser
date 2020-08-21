@@ -65,14 +65,10 @@ static VALUE rb_cParams;
 
 %% write data;
 
-/*
-    parser = RagelQueryParser.new
-    parser.parse(query, separator = "&", unescaper = -> {})
-*/
 static VALUE parse(int argc, VALUE* argv, VALUE self) {
     VALUE query_string, separator, unescaper;
     rb_scan_args(argc, argv, "11&", &query_string, &separator, &unescaper);
-    // TODO: use separator
+    // TODO: how to pass separator to Ragel?
 
     if (NIL_P(query_string)) query_string = rb_obj_freeze(rb_str_new_cstr(""));
 
@@ -138,6 +134,24 @@ static VALUE make_default(VALUE self, VALUE key_space_limit, VALUE param_depth_l
     return rb_funcall(self, rb_intern("new"), 3, rb_cParams, key_space_limit, param_depth_limit);
 }
 
+static VALUE new_space_limit(VALUE self, VALUE key_space_limit) {
+    return rb_funcall(rb_obj_class(self),
+                      rb_intern("new"),
+                      3,
+                      rb_iv_get(self, "@params_class"),
+                      key_space_limit,
+                      rb_iv_get(self, "@param_depth_limit"));
+}
+
+static VALUE new_depth_limit(VALUE self, VALUE param_depth_limit) {
+    return rb_funcall(rb_obj_class(self),
+                      rb_intern("new"),
+                      3,
+                      rb_iv_get(self, "@params_class"),
+                      rb_iv_get(self, "@key_space_limit"),
+                      param_depth_limit);
+}
+
 void Init_parser(VALUE rb_mRagelQueryParser) {
     VALUE rb_cParser = rb_define_class_under(rb_mRagelQueryParser, "Parser", rb_cObject);
 
@@ -149,6 +163,8 @@ void Init_parser(VALUE rb_mRagelQueryParser) {
 
     rb_define_method(rb_cParser, "initialize", parser_initialize, 3);
     rb_define_method(rb_cParser, "parse_query", parse, -1);
+    rb_define_method(rb_cParser, "new_space_limit", new_space_limit, 1);
+    rb_define_method(rb_cParser, "new_depth_limit", new_depth_limit, 1);
 
     rb_define_singleton_method(rb_cParser, "unescape", unescape, 1);
     rb_define_singleton_method(rb_cParser, "make_default", make_default, 2);

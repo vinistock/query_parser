@@ -29,14 +29,10 @@ static const int parser_en_main = 0;
 
 #line 67 "ext/ragel_query_parser/parser.rl"
 
-/*
-    parser = RagelQueryParser.new
-    parser.parse(query, separator = "&", unescaper = -> {})
-*/
 static VALUE parse(int argc, VALUE* argv, VALUE self) {
     VALUE query_string, separator, unescaper;
     rb_scan_args(argc, argv, "11&", &query_string, &separator, &unescaper);
-    // TODO: use separator
+    // TODO: how to pass separator to Ragel?
 
     if (NIL_P(query_string)) query_string = rb_obj_freeze(rb_str_new_cstr(""));
 
@@ -54,12 +50,12 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
     }
 
     
-#line 58 "ext/ragel_query_parser/parser.c"
+#line 54 "ext/ragel_query_parser/parser.c"
 	{
 	cs = parser_start;
 	}
 
-#line 63 "ext/ragel_query_parser/parser.c"
+#line 59 "ext/ragel_query_parser/parser.c"
 	{
 	if ( p == pe )
 		goto _test_eof;
@@ -89,7 +85,7 @@ st0:
 	if ( ++p == pe )
 		goto _test_eof0;
 case 0:
-#line 93 "ext/ragel_query_parser/parser.c"
+#line 89 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr1;
 		case 37: goto tr2;
@@ -135,7 +131,7 @@ st14:
 	if ( ++p == pe )
 		goto _test_eof14;
 case 14:
-#line 139 "ext/ragel_query_parser/parser.c"
+#line 135 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto tr29;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -151,7 +147,7 @@ st15:
 	if ( ++p == pe )
 		goto _test_eof15;
 case 15:
-#line 155 "ext/ragel_query_parser/parser.c"
+#line 151 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto tr31;
 	goto tr30;
@@ -165,7 +161,7 @@ st16:
 	if ( ++p == pe )
 		goto _test_eof16;
 case 16:
-#line 169 "ext/ragel_query_parser/parser.c"
+#line 165 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st17;
 	goto st16;
@@ -179,7 +175,7 @@ st17:
 	if ( ++p == pe )
 		goto _test_eof17;
 case 17:
-#line 183 "ext/ragel_query_parser/parser.c"
+#line 179 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -195,7 +191,7 @@ st18:
 	if ( ++p == pe )
 		goto _test_eof18;
 case 18:
-#line 199 "ext/ragel_query_parser/parser.c"
+#line 195 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto tr29;
 	if ( 48 <= (*p) && (*p) <= 57 )
@@ -229,7 +225,7 @@ st3:
 	if ( ++p == pe )
 		goto _test_eof3;
 case 3:
-#line 233 "ext/ragel_query_parser/parser.c"
+#line 229 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st3;
 		case 37: goto tr8;
@@ -272,7 +268,7 @@ st4:
 	if ( ++p == pe )
 		goto _test_eof4;
 case 4:
-#line 276 "ext/ragel_query_parser/parser.c"
+#line 272 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -358,7 +354,7 @@ st20:
 	if ( ++p == pe )
 		goto _test_eof20;
 case 20:
-#line 362 "ext/ragel_query_parser/parser.c"
+#line 358 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st20;
 		case 37: goto tr38;
@@ -411,7 +407,7 @@ st21:
 	if ( ++p == pe )
 		goto _test_eof21;
 case 21:
-#line 415 "ext/ragel_query_parser/parser.c"
+#line 411 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -466,7 +462,7 @@ st23:
 	if ( ++p == pe )
 		goto _test_eof23;
 case 23:
-#line 470 "ext/ragel_query_parser/parser.c"
+#line 466 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr43;
 		case 37: goto tr44;
@@ -530,7 +526,7 @@ st24:
 	if ( ++p == pe )
 		goto _test_eof24;
 case 24:
-#line 534 "ext/ragel_query_parser/parser.c"
+#line 530 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st24;
 		case 37: goto tr47;
@@ -580,7 +576,7 @@ st25:
 	if ( ++p == pe )
 		goto _test_eof25;
 case 25:
-#line 584 "ext/ragel_query_parser/parser.c"
+#line 580 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -632,7 +628,7 @@ st28:
 	if ( ++p == pe )
 		goto _test_eof28;
 case 28:
-#line 636 "ext/ragel_query_parser/parser.c"
+#line 632 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr51;
 		case 37: goto tr53;
@@ -703,7 +699,7 @@ st29:
 	if ( ++p == pe )
 		goto _test_eof29;
 case 29:
-#line 707 "ext/ragel_query_parser/parser.c"
+#line 703 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr56;
 		case 37: goto tr57;
@@ -751,7 +747,7 @@ st30:
 	if ( ++p == pe )
 		goto _test_eof30;
 case 30:
-#line 755 "ext/ragel_query_parser/parser.c"
+#line 751 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 37: goto st17;
 		case 93: goto st31;
@@ -833,7 +829,7 @@ st33:
 	if ( ++p == pe )
 		goto _test_eof33;
 case 33:
-#line 837 "ext/ragel_query_parser/parser.c"
+#line 833 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st33;
 		case 37: goto tr65;
@@ -883,7 +879,7 @@ st34:
 	if ( ++p == pe )
 		goto _test_eof34;
 case 34:
-#line 887 "ext/ragel_query_parser/parser.c"
+#line 883 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -935,7 +931,7 @@ st37:
 	if ( ++p == pe )
 		goto _test_eof37;
 case 37:
-#line 939 "ext/ragel_query_parser/parser.c"
+#line 935 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr69;
 		case 37: goto tr71;
@@ -964,7 +960,7 @@ st38:
 	if ( ++p == pe )
 		goto _test_eof38;
 case 38:
-#line 968 "ext/ragel_query_parser/parser.c"
+#line 964 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr35;
 		case 37: goto tr74;
@@ -1000,7 +996,7 @@ st6:
 	if ( ++p == pe )
 		goto _test_eof6;
 case 6:
-#line 1004 "ext/ragel_query_parser/parser.c"
+#line 1000 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr14;
 		case 37: goto tr15;
@@ -1048,7 +1044,7 @@ st39:
 	if ( ++p == pe )
 		goto _test_eof39;
 case 39:
-#line 1052 "ext/ragel_query_parser/parser.c"
+#line 1048 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st39;
 		case 37: goto tr78;
@@ -1088,7 +1084,7 @@ st7:
 	if ( ++p == pe )
 		goto _test_eof7;
 case 7:
-#line 1092 "ext/ragel_query_parser/parser.c"
+#line 1088 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -1129,7 +1125,7 @@ st9:
 	if ( ++p == pe )
 		goto _test_eof9;
 case 9:
-#line 1133 "ext/ragel_query_parser/parser.c"
+#line 1129 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 37: goto st2;
 		case 93: goto st10;
@@ -1195,7 +1191,7 @@ st40:
 	if ( ++p == pe )
 		goto _test_eof40;
 case 40:
-#line 1199 "ext/ragel_query_parser/parser.c"
+#line 1195 "ext/ragel_query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st40;
 		case 37: goto tr81;
@@ -1235,7 +1231,7 @@ st12:
 	if ( ++p == pe )
 		goto _test_eof12;
 case 12:
-#line 1239 "ext/ragel_query_parser/parser.c"
+#line 1235 "ext/ragel_query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -1371,13 +1367,13 @@ case 13:
         params_set(parameters, current_key, rb_str_split(current_value, ","));
     }
 	break;
-#line 1375 "ext/ragel_query_parser/parser.c"
+#line 1371 "ext/ragel_query_parser/parser.c"
 	}
 	}
 
 	}
 
-#line 95 "ext/ragel_query_parser/parser.rl"
+#line 91 "ext/ragel_query_parser/parser.rl"
 
 
     return parameters;
@@ -1424,6 +1420,24 @@ static VALUE make_default(VALUE self, VALUE key_space_limit, VALUE param_depth_l
     return rb_funcall(self, rb_intern("new"), 3, rb_cParams, key_space_limit, param_depth_limit);
 }
 
+static VALUE new_space_limit(VALUE self, VALUE key_space_limit) {
+    return rb_funcall(rb_obj_class(self),
+                      rb_intern("new"),
+                      3,
+                      rb_iv_get(self, "@params_class"),
+                      key_space_limit,
+                      rb_iv_get(self, "@param_depth_limit"));
+}
+
+static VALUE new_depth_limit(VALUE self, VALUE param_depth_limit) {
+    return rb_funcall(rb_obj_class(self),
+                      rb_intern("new"),
+                      3,
+                      rb_iv_get(self, "@params_class"),
+                      rb_iv_get(self, "@key_space_limit"),
+                      param_depth_limit);
+}
+
 void Init_parser(VALUE rb_mRagelQueryParser) {
     VALUE rb_cParser = rb_define_class_under(rb_mRagelQueryParser, "Parser", rb_cObject);
 
@@ -1435,6 +1449,8 @@ void Init_parser(VALUE rb_mRagelQueryParser) {
 
     rb_define_method(rb_cParser, "initialize", parser_initialize, 3);
     rb_define_method(rb_cParser, "parse_query", parse, -1);
+    rb_define_method(rb_cParser, "new_space_limit", new_space_limit, 1);
+    rb_define_method(rb_cParser, "new_depth_limit", new_depth_limit, 1);
 
     rb_define_singleton_method(rb_cParser, "unescape", unescape, 1);
     rb_define_singleton_method(rb_cParser, "make_default", make_default, 2);
