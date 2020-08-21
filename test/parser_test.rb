@@ -4,11 +4,21 @@ require "test_helper"
 
 class ParserTest < Minitest::Test
   def setup
-    @parser = RagelQueryParser::Parser.new
+    @parser = RagelQueryParser::Parser.new(RagelQueryParser::Params, 65_536, 32)
   end
 
   def test_initialize
-    assert_kind_of RagelQueryParser::Parser, RagelQueryParser::Parser.new
+    assert_kind_of RagelQueryParser::Parser, @parser
+    assert_equal 65_536, @parser.key_space_limit
+    assert_equal 32, @parser.param_depth_limit
+  end
+
+  def test_make_default
+    parser = RagelQueryParser::Parser.make_default(65_536, 32)
+
+    assert_equal 65_536, parser.key_space_limit
+    assert_equal 32, parser.param_depth_limit
+    assert_equal RagelQueryParser::Params, parser.instance_variable_get(:@params_class)
   end
 
   def test_single_param_parse
