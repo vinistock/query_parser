@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         ruby_version: [2.5, 2.6, 2.7]
-          os: [ubuntu, macos, windows]
+        os: [ubuntu, macos, windows]
 
     steps:
     - uses: actions/checkout@v2.3.2
