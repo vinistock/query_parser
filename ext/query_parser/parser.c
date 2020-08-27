@@ -13,13 +13,14 @@
 static VALUE rb_mEncoding;
 static VALUE utf_8;
 static VALUE rb_cParams;
+static VALUE rb_eParameterTypeError;
 
 
-#line 84 "ext/query_parser/parser.rl"
+#line 85 "ext/query_parser/parser.rl"
 
 
 
-#line 23 "ext/query_parser/parser.c"
+#line 24 "ext/query_parser/parser.c"
 static const int parser_start = 0;
 static const int parser_first_final = 14;
 static const int parser_error = -1;
@@ -27,7 +28,7 @@ static const int parser_error = -1;
 static const int parser_en_main = 0;
 
 
-#line 87 "ext/query_parser/parser.rl"
+#line 88 "ext/query_parser/parser.rl"
 
 static VALUE make_params(VALUE self) {
     return rb_funcall(rb_iv_get(self, "@params_class"),
@@ -57,19 +58,19 @@ static VALUE parse(int argc, VALUE* argv, VALUE self) {
     }
 
     
-#line 61 "ext/query_parser/parser.c"
+#line 62 "ext/query_parser/parser.c"
 	{
 	cs = parser_start;
 	}
 
-#line 66 "ext/query_parser/parser.c"
+#line 67 "ext/query_parser/parser.c"
 	{
 	if ( p == pe )
 		goto _test_eof;
 	switch ( cs )
 	{
 tr79:
-#line 39 "ext/query_parser/parser.rl"
+#line 40 "ext/query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -89,7 +90,7 @@ tr79:
     }
 	goto st0;
 tr82:
-#line 57 "ext/query_parser/parser.rl"
+#line 58 "ext/query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -112,7 +113,7 @@ st0:
 	if ( ++p == pe )
 		goto _test_eof0;
 case 0:
-#line 116 "ext/query_parser/parser.c"
+#line 117 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr1;
 		case 37: goto tr2;
@@ -149,7 +150,7 @@ case 2:
 		goto st1;
 	goto st14;
 tr34:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
@@ -158,14 +159,14 @@ st14:
 	if ( ++p == pe )
 		goto _test_eof14;
 case 14:
-#line 162 "ext/query_parser/parser.c"
+#line 163 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto tr29;
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr30;
 	goto tr28;
 tr28:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
@@ -174,12 +175,12 @@ st15:
 	if ( ++p == pe )
 		goto _test_eof15;
 case 15:
-#line 178 "ext/query_parser/parser.c"
+#line 179 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto tr31;
 	goto tr30;
 tr30:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
@@ -188,12 +189,12 @@ st16:
 	if ( ++p == pe )
 		goto _test_eof16;
 case 16:
-#line 192 "ext/query_parser/parser.c"
+#line 193 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st17;
 	goto st16;
 tr31:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
@@ -202,14 +203,14 @@ st17:
 	if ( ++p == pe )
 		goto _test_eof17;
 case 17:
-#line 206 "ext/query_parser/parser.c"
+#line 207 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st16;
 	goto st14;
 tr29:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
@@ -218,32 +219,32 @@ st18:
 	if ( ++p == pe )
 		goto _test_eof18;
 case 18:
-#line 222 "ext/query_parser/parser.c"
+#line 223 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto tr29;
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto tr30;
 	goto tr34;
 tr1:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
 	goto st3;
 tr3:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st3;
 tr9:
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -252,7 +253,7 @@ st3:
 	if ( ++p == pe )
 		goto _test_eof3;
 case 3:
-#line 256 "ext/query_parser/parser.c"
+#line 257 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st3;
 		case 37: goto tr8;
@@ -275,18 +276,18 @@ case 3:
 		goto st3;
 	goto st1;
 tr2:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st4;
 tr8:
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -295,7 +296,7 @@ st4:
 	if ( ++p == pe )
 		goto _test_eof4;
 case 4:
-#line 299 "ext/query_parser/parser.c"
+#line 300 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -338,41 +339,41 @@ case 19:
 		goto tr36;
 	goto tr28;
 tr56:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
 	goto st20;
 tr58:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st20;
 tr39:
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st20;
 tr35:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
 	goto st20;
 tr75:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -381,7 +382,7 @@ st20:
 	if ( ++p == pe )
 		goto _test_eof20;
 case 20:
-#line 385 "ext/query_parser/parser.c"
+#line 386 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st20;
 		case 37: goto tr38;
@@ -404,28 +405,28 @@ case 20:
 		goto st20;
 	goto st16;
 tr57:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st21;
 tr38:
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st21;
 tr74:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -434,7 +435,7 @@ st21:
 	if ( ++p == pe )
 		goto _test_eof21;
 case 21:
-#line 438 "ext/query_parser/parser.c"
+#line 439 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -462,7 +463,7 @@ case 22:
 		goto st20;
 	goto st16;
 tr40:
-#line 31 "ext/query_parser/parser.rl"
+#line 32 "ext/query_parser/parser.rl"
 	{
         current_key = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -472,11 +473,11 @@ tr40:
     }
 	goto st23;
 tr76:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 31 "ext/query_parser/parser.rl"
+#line 32 "ext/query_parser/parser.rl"
 	{
         current_key = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -489,7 +490,7 @@ st23:
 	if ( ++p == pe )
 		goto _test_eof23;
 case 23:
-#line 493 "ext/query_parser/parser.c"
+#line 494 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr43;
 		case 37: goto tr44;
@@ -510,41 +511,41 @@ case 23:
 		goto tr43;
 	goto st16;
 tr43:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
 	goto st24;
 tr45:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st24;
 tr49:
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st24;
 tr51:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
 	goto st24;
 tr55:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -553,7 +554,7 @@ st24:
 	if ( ++p == pe )
 		goto _test_eof24;
 case 24:
-#line 557 "ext/query_parser/parser.c"
+#line 558 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st24;
 		case 37: goto tr47;
@@ -573,28 +574,28 @@ case 24:
 		goto st24;
 	goto st16;
 tr44:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st25;
 tr47:
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st25;
 tr53:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -603,7 +604,7 @@ st25:
 	if ( ++p == pe )
 		goto _test_eof25;
 case 25:
-#line 607 "ext/query_parser/parser.c"
+#line 608 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -646,7 +647,7 @@ case 27:
 		goto tr52;
 	goto tr28;
 tr52:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
@@ -655,7 +656,7 @@ st28:
 	if ( ++p == pe )
 		goto _test_eof28;
 case 28:
-#line 659 "ext/query_parser/parser.c"
+#line 660 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr51;
 		case 37: goto tr53;
@@ -675,7 +676,7 @@ case 28:
 		goto tr51;
 	goto tr30;
 tr48:
-#line 39 "ext/query_parser/parser.rl"
+#line 40 "ext/query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -695,11 +696,11 @@ tr48:
     }
 	goto st29;
 tr54:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 39 "ext/query_parser/parser.rl"
+#line 40 "ext/query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -719,7 +720,7 @@ tr54:
     }
 	goto st29;
 tr66:
-#line 57 "ext/query_parser/parser.rl"
+#line 58 "ext/query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -739,11 +740,11 @@ tr66:
     }
 	goto st29;
 tr72:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 57 "ext/query_parser/parser.rl"
+#line 58 "ext/query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -766,7 +767,7 @@ st29:
 	if ( ++p == pe )
 		goto _test_eof29;
 case 29:
-#line 770 "ext/query_parser/parser.c"
+#line 771 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr56;
 		case 37: goto tr57;
@@ -787,7 +788,7 @@ case 29:
 		goto tr56;
 	goto st16;
 tr41:
-#line 31 "ext/query_parser/parser.rl"
+#line 32 "ext/query_parser/parser.rl"
 	{
         current_key = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -797,11 +798,11 @@ tr41:
     }
 	goto st30;
 tr77:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 31 "ext/query_parser/parser.rl"
+#line 32 "ext/query_parser/parser.rl"
 	{
         current_key = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -814,7 +815,7 @@ st30:
 	if ( ++p == pe )
 		goto _test_eof30;
 case 30:
-#line 818 "ext/query_parser/parser.c"
+#line 819 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 37: goto st17;
 		case 93: goto st31;
@@ -853,41 +854,41 @@ case 32:
 		goto tr61;
 	goto st16;
 tr61:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
 	goto st33;
 tr63:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st33;
 tr67:
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st33;
 tr69:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
 	goto st33;
 tr73:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -896,7 +897,7 @@ st33:
 	if ( ++p == pe )
 		goto _test_eof33;
 case 33:
-#line 900 "ext/query_parser/parser.c"
+#line 901 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st33;
 		case 37: goto tr65;
@@ -916,28 +917,28 @@ case 33:
 		goto st33;
 	goto st16;
 tr62:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st34;
 tr65:
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st34;
 tr71:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -946,7 +947,7 @@ st34:
 	if ( ++p == pe )
 		goto _test_eof34;
 case 34:
-#line 950 "ext/query_parser/parser.c"
+#line 951 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -989,7 +990,7 @@ case 36:
 		goto tr70;
 	goto tr28;
 tr70:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
@@ -998,7 +999,7 @@ st37:
 	if ( ++p == pe )
 		goto _test_eof37;
 case 37:
-#line 1002 "ext/query_parser/parser.c"
+#line 1003 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr69;
 		case 37: goto tr71;
@@ -1018,7 +1019,7 @@ case 37:
 		goto tr69;
 	goto tr30;
 tr36:
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
@@ -1027,7 +1028,7 @@ st38:
 	if ( ++p == pe )
 		goto _test_eof38;
 case 38:
-#line 1031 "ext/query_parser/parser.c"
+#line 1032 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr35;
 		case 37: goto tr74;
@@ -1050,7 +1051,7 @@ case 38:
 		goto tr35;
 	goto tr30;
 tr10:
-#line 31 "ext/query_parser/parser.rl"
+#line 32 "ext/query_parser/parser.rl"
 	{
         current_key = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -1063,7 +1064,7 @@ st6:
 	if ( ++p == pe )
 		goto _test_eof6;
 case 6:
-#line 1067 "ext/query_parser/parser.c"
+#line 1068 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto tr14;
 		case 37: goto tr15;
@@ -1084,25 +1085,25 @@ case 6:
 		goto tr14;
 	goto st1;
 tr14:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
 	goto st39;
 tr16:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st39;
 tr80:
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -1111,7 +1112,7 @@ st39:
 	if ( ++p == pe )
 		goto _test_eof39;
 case 39:
-#line 1115 "ext/query_parser/parser.c"
+#line 1116 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st39;
 		case 37: goto tr78;
@@ -1131,18 +1132,18 @@ case 39:
 		goto st39;
 	goto st1;
 tr15:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st7;
 tr78:
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -1151,7 +1152,7 @@ st7:
 	if ( ++p == pe )
 		goto _test_eof7;
 case 7:
-#line 1155 "ext/query_parser/parser.c"
+#line 1156 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -1179,7 +1180,7 @@ case 8:
 		goto st39;
 	goto st1;
 tr11:
-#line 31 "ext/query_parser/parser.rl"
+#line 32 "ext/query_parser/parser.rl"
 	{
         current_key = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -1192,7 +1193,7 @@ st9:
 	if ( ++p == pe )
 		goto _test_eof9;
 case 9:
-#line 1196 "ext/query_parser/parser.c"
+#line 1197 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 37: goto st2;
 		case 93: goto st10;
@@ -1231,25 +1232,25 @@ case 11:
 		goto tr22;
 	goto st1;
 tr22:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
 	goto st40;
 tr24:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st40;
 tr83:
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -1258,7 +1259,7 @@ st40:
 	if ( ++p == pe )
 		goto _test_eof40;
 case 40:
-#line 1262 "ext/query_parser/parser.c"
+#line 1263 "ext/query_parser/parser.c"
 	switch( (*p) ) {
 		case 33: goto st40;
 		case 37: goto tr81;
@@ -1278,18 +1279,18 @@ case 40:
 		goto st40;
 	goto st1;
 tr23:
-#line 18 "ext/query_parser/parser.rl"
+#line 19 "ext/query_parser/parser.rl"
 	{
         encoded = 0;
         buffer = p;
     }
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
 	goto st12;
 tr81:
-#line 23 "ext/query_parser/parser.rl"
+#line 24 "ext/query_parser/parser.rl"
 	{
         encoded = 1;
     }
@@ -1298,7 +1299,7 @@ st12:
 	if ( ++p == pe )
 		goto _test_eof12;
 case 12:
-#line 1302 "ext/query_parser/parser.c"
+#line 1303 "ext/query_parser/parser.c"
 	if ( (*p) == 37 )
 		goto st18;
 	if ( (*p) < 65 ) {
@@ -1379,14 +1380,14 @@ case 13:
 	case 27: 
 	case 36: 
 	case 38: 
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
 	break;
 	case 24: 
 	case 39: 
-#line 39 "ext/query_parser/parser.rl"
+#line 40 "ext/query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -1407,7 +1408,7 @@ case 13:
 	break;
 	case 33: 
 	case 40: 
-#line 57 "ext/query_parser/parser.rl"
+#line 58 "ext/query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -1427,11 +1428,11 @@ case 13:
     }
 	break;
 	case 28: 
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 39 "ext/query_parser/parser.rl"
+#line 40 "ext/query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -1451,11 +1452,11 @@ case 13:
     }
 	break;
 	case 37: 
-#line 27 "ext/query_parser/parser.rl"
+#line 28 "ext/query_parser/parser.rl"
 	{
         rb_raise(rb_eArgError, "invalid encoding");
     }
-#line 57 "ext/query_parser/parser.rl"
+#line 58 "ext/query_parser/parser.rl"
 	{
         current_value = rb_enc_str_new(buffer, p - buffer, encoding);
 
@@ -1474,13 +1475,13 @@ case 13:
         }
     }
 	break;
-#line 1478 "ext/query_parser/parser.c"
+#line 1479 "ext/query_parser/parser.c"
 	}
 	}
 
 	}
 
-#line 118 "ext/query_parser/parser.rl"
+#line 119 "ext/query_parser/parser.rl"
 
 
     return params_to_hash(parameters);
@@ -1545,8 +1546,108 @@ static VALUE new_depth_limit(VALUE self, VALUE param_depth_limit) {
                       param_depth_limit);
 }
 
+static VALUE check_types(RB_BLOCK_CALL_FUNC_ARGLIST(args, self)) {
+    VALUE h = rb_ary_entry(args, 0);
+    VALUE part = rb_ary_entry(args, 1);
+
+    if (RSTRING_LEN(part) == 0) {
+        rb_funcall(rb_current_receiver(), rb_intern("next"), 1, h);
+    }
+
+    if (!(RTEST(rb_obj_is_kind_of(h, rb_iv_get(self, "@params_class"))) && RTEST(rb_hash_aref(h, part)))) {
+        return Qfalse;
+    }
+
+    return rb_hash_aref(h, part);
+}
+
+static VALUE params_hash_has_key(VALUE self, VALUE hash, VALUE key) {
+    VALUE regex = rb_funcall(rb_cRegexp, rb_intern("new"), 1, rb_obj_freeze(rb_str_new_cstr("\\[\\]")));
+    if (RTEST(rb_funcall(regex, rb_intern("match?"), 1, key))) return Qfalse;
+
+    VALUE split_regex = rb_funcall(rb_cRegexp, rb_intern("new"), 1, rb_obj_freeze(rb_str_new_cstr("[\\[\\]]+")));
+    VALUE args[1];
+    args[0] = hash;
+
+    rb_block_call(rb_funcall(key, rb_intern("split"), 1, split_regex), rb_intern("inject"), 1, args, check_types, self);
+    return Qtrue;
+}
+
+static VALUE normalize_params(VALUE self, VALUE params, VALUE name, VALUE value, VALUE depth) {
+    if (NUM2INT(depth) <= 0) rb_raise(rb_eRangeError, "depth must be greater than zero");
+
+    VALUE regex = rb_funcall(rb_cRegexp, rb_intern("new"), 1, rb_obj_freeze(rb_str_new_cstr("\\A[\\[\\]]*([^\\[\\]]+)\\]*")));
+    VALUE regex_2 = rb_funcall(rb_cRegexp, rb_intern("new"), 1, rb_obj_freeze(rb_str_new_cstr("^\\[\\]\\[([^\\[\\]]+)\\]$")));
+    VALUE regex_3 = rb_funcall(rb_cRegexp, rb_intern("new"), 1, rb_obj_freeze(rb_str_new_cstr("^\\[\\](.+)$")));
+    VALUE match_data = rb_funcall(regex, rb_intern("match"), 1, name);
+    VALUE k = rb_funcall(match_data, rb_intern("[]"), 1, INT2NUM(0));
+    VALUE after = rb_funcall(match_data, rb_intern("post_match"), 0);
+    VALUE entry = Qnil, array_entry = Qnil;
+
+    if (NIL_P(k)) k = rb_obj_freeze(rb_str_new_cstr(""));
+    if (NIL_P(after)) after = rb_obj_freeze(rb_str_new_cstr(""));
+
+    if (RSTRING_LEN(k) == 0) {
+        if (!NIL_P(value) && strcmp(RSTRING_PTR(name), "[]") == 0) {
+            rb_funcall(value, rb_intern("to_ary"), 0);
+        } else {
+            return Qnil;
+        }
+    }
+
+    if (strcmp(RSTRING_PTR(after), "") == 0) {
+        rb_funcall(params, rb_intern("[]="), 2, k, value);
+    } else if (strcmp(RSTRING_PTR(after), "[") == 0) {
+        rb_funcall(params, rb_intern("[]="), 2, name, value);
+    } else if (strcmp(RSTRING_PTR(after), "[]") == 0) {
+        if (NIL_P(entry = params_access(params, k))) {
+            rb_funcall(params, rb_intern("[]="), 2, k, rb_ary_new());
+        }
+
+        if (!RTEST(rb_obj_is_kind_of(entry, rb_cArray))) {
+            rb_raise(rb_eParameterTypeError,
+                     "expected Array (got %s) for param `%s'",
+                     rb_obj_classname(entry),
+                     RSTRING_PTR(rb_funcall(k, rb_intern("to_s"), 0)));
+        }
+
+        rb_funcall(params, rb_intern("[]="), 2, k, rb_ary_push(entry, value));
+    } else if (RTEST(match_data = rb_funcall(regex_2, rb_intern("match"), 1, after)) || RTEST(match_data = rb_funcall(regex_3, rb_intern("match"), 1, after))) {
+        VALUE child_key = rb_funcall(match_data, rb_intern("[]"), 1, INT2NUM(0));
+
+        if (NIL_P(entry = params_access(params, k))) rb_funcall(params, rb_intern("[]="), 2, k, rb_ary_new());
+
+        if (!RTEST(rb_obj_is_kind_of(entry, rb_cArray))) {
+            rb_raise(rb_eParameterTypeError,
+                     "expected Array (got %s) for param `%s'",
+                     rb_obj_classname(entry),
+                     RSTRING_PTR(rb_funcall(k, rb_intern("to_s"), 0)));
+        }
+
+        if (RTEST(rb_obj_is_kind_of(array_entry = rb_ary_entry(entry, RARRAY_LEN(entry) - 1), rb_iv_get(self, "@params_class"))) && !RTEST(params_hash_has_key(self, array_entry, child_key))) {
+            normalize_params(self, array_entry, child_key, value, INT2NUM(NUM2INT(depth) - 1));
+        } else {
+            rb_funcall(params, rb_intern("[]="), 2, k, rb_ary_push(entry, normalize_params(self, make_params(self), child_key, value, INT2NUM(NUM2INT(depth) - 1))));
+        }
+    } else {
+        if (NIL_P(entry = params_access(params, k))) rb_funcall(params, rb_intern("[]="), 2, k, make_params(self));
+
+        if (!RTEST(rb_obj_is_kind_of(entry, rb_iv_get(self, "@params_class")))) {
+            rb_raise(rb_eParameterTypeError,
+                     "expected Hash (got %s) for param `%s'",
+                     rb_obj_classname(entry),
+                     RSTRING_PTR(rb_funcall(k, rb_intern("to_s"), 0)));
+        }
+
+        rb_funcall(params, rb_intern("[]="), 2, k, normalize_params(self, entry, after, value, INT2NUM(NUM2INT(depth) - 1)));
+    }
+
+    return params;
+}
+
 void Init_parser(VALUE rb_mQueryParser) {
     VALUE rb_cParser = rb_define_class_under(rb_mQueryParser, "Parser", rb_cObject);
+    rb_eParameterTypeError = rb_define_class_under(rb_cParser, "ParameterTypeError", rb_eTypeError);
 
     rb_cParams = rb_const_get(rb_mQueryParser, rb_intern("Params"));
     rb_mEncoding = rb_const_get(rb_cObject, rb_intern("Encoding"));
@@ -1559,6 +1660,7 @@ void Init_parser(VALUE rb_mQueryParser) {
     rb_define_method(rb_cParser, "new_space_limit", new_space_limit, 1);
     rb_define_method(rb_cParser, "new_depth_limit", new_depth_limit, 1);
     rb_define_method(rb_cParser, "make_params", make_params, 0);
+    rb_define_method(rb_cParser, "normalize_params", normalize_params, 4);
 
     rb_define_singleton_method(rb_cParser, "unescape", unescape, 1);
     rb_define_singleton_method(rb_cParser, "make_default", make_default, 2);
