@@ -106,6 +106,15 @@ class ParserTest < Minitest::Test # rubocop:disable Metrics/ClassLength
     assert_equal({}, @parser.parse_query(nil))
   end
 
+  def test_normalize_params
+    params = @parser.parse_query("country=BR&language=PT&tags[]=webdev,ruby,rails&user={name:john}")
+
+    assert_equal(
+      { "country" => "BR", "language" => "PT", "tags" => %w[webdev ruby rails], "user" => "john" },
+      @parser.normalize_params(params, "user", "john", 32)
+    )
+  end
+
   def test_unescape_ruby_spec
     assert_equal(
       "  !\"\#$%&'()*+,-./09:;<=>?@AZ[\\]^_`az{|}~",
