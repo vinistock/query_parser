@@ -9,7 +9,7 @@ static VALUE params_initialize(VALUE self, VALUE limit) {
     return self;
 }
 
-VALUE params_access(VALUE self, VALUE key) {
+static VALUE params_access(VALUE self, VALUE key) {
     return rb_hash_aref(rb_iv_get(self, "@params"), key);
 }
 
@@ -17,7 +17,7 @@ static VALUE params_has_key(VALUE self, VALUE key) {
     return RTEST(rb_hash_aref(rb_iv_get(self, "@params"), key)) ? Qtrue : Qfalse;
 }
 
-VALUE params_set(VALUE self, VALUE key, VALUE value) {
+static VALUE params_set(VALUE self, VALUE key, VALUE value) {
     long size = NUM2LONG(rb_iv_get(self, "@size"));
 
     if (RTEST(key) && !RTEST(params_has_key(self, key))) {
@@ -54,7 +54,7 @@ static int process_params(VALUE key, VALUE value, VALUE args) {
     return ST_CONTINUE;
 }
 
-VALUE params_to_hash(VALUE self) {
+static VALUE params_to_hash(VALUE self) {
     VALUE params = rb_iv_get(self, "@params");
     rb_hash_foreach(params, process_params, (VALUE)NULL);
     return params;
