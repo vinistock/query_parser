@@ -1473,4 +1473,3 @@ case 13:
 
     return rb_funcall(parameters, rb_intern("to_h"), 0);
 }
-

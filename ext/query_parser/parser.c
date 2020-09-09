@@ -7,6 +7,7 @@
 
 #include "parser.h"
 #include "parse_query.h"
+#include "parse_nested.h"
 
 static VALUE rb_mEncoding;
 static VALUE utf_8;
@@ -189,11 +190,13 @@ void Init_parser(VALUE rb_mQueryParser) {
     rb_funcall(rb_cParser, rb_intern("attr_reader"), 2, ID2SYM(rb_intern("key_space_limit")), ID2SYM(rb_intern("param_depth_limit")));
 
     rb_define_method(rb_cParser, "initialize", parser_initialize, 3);
-    rb_define_method(rb_cParser, "parse_query", parse_query, -1);
     rb_define_method(rb_cParser, "new_space_limit", new_space_limit, 1);
     rb_define_method(rb_cParser, "new_depth_limit", new_depth_limit, 1);
     rb_define_method(rb_cParser, "make_params", make_params, 0);
     rb_define_method(rb_cParser, "normalize_params", normalize_params, 4);
+
+    rb_define_method(rb_cParser, "parse_query", parse_query, -1);
+    rb_define_method(rb_cParser, "parse_nested_query", parse_nested_query, -1);
 
     rb_define_singleton_method(rb_cParser, "unescape", unescape, 1);
     rb_define_singleton_method(rb_cParser, "make_default", make_default, 2);

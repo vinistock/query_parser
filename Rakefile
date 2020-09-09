@@ -14,7 +14,12 @@ require "rake/extensiontask"
 task :ragel do
   ext_path = "ext/query_parser"
   puts "Compiling Ragel..."
-  system("ragel #{ext_path}/parse_query.rl -C -G2 -I ext/query_parser -o #{ext_path}/parse_query.c")
+
+  %W[#{ext_path}/parse_query.rl #{ext_path}/parse_nested.rl].each do |ragel_file|
+    compiled_path = ragel_file.gsub(".rl", ".c")
+    system("ragel #{ragel_file} -C -G2 -I ext/query_parser -o #{compiled_path}")
+  end
+
   abort unless $?.success? # rubocop:disable Style/SpecialGlobalVars
 end
 
