@@ -107,4 +107,3 @@ VALUE parse_query(int argc, VALUE* argv, VALUE self) {
 
     return rb_funcall(parameters, rb_intern("to_h"), 0);
 }
-
