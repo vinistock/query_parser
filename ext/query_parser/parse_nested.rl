@@ -10,7 +10,36 @@
 %%{
     machine nested_parser;
 
-    main := alpha;
+    action start_word {
+        encoded = 0;
+        buffer = p;
+    }
+
+    action set_encoded {
+        encoded = 1;
+    }
+
+    action parameter_key {
+        if (NIL_P(current_key)) {
+            current_key = rb_enc_str_new(buffer, p - buffer, encoding);
+
+            if (encoded) current_key = unescape(self, current_key);
+
+            current_key = rb_obj_freeze(current_key);
+        } else {
+            rb_funcall(parameters, rb_intern("[]="), 2, current_key, rb_hash_new()); 
+        }
+    }
+
+    parameter_separator = [&;];
+    encoded_content = ("+" | "%" xdigit xdigit) >set_encoded;
+    parameter_content = (alnum | [\-._~:/#@!$'()*,] | encoded_content)+ >start_word;
+    regular_parameter = parameter_content %parameter_key "=" parameter_content %regular_parameter_value;
+    array_parameter = parameter_content %parameter_key "[]=" parameter_content %array_parameter_value;
+    nested_parameter = parameter_content %parameter_key ([parameter_content %parameter_key])+ = parameter_content %regular_parameter_value;
+    parameter = array_parameter | regular_parameter;
+
+    main := parameter (parameter_separator parameter)*;
 }%%
 
 %% write data;
